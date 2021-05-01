@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ff3d00</color>
+    <color name="colorPrimaryDark">#c30000</color>
+    <color name="colorAccent">#ff7539</color>
+
+    <color name="splashScreenStatusBar">#00000000</color>
+    <color name="smallButtonActivate">#E6FFFFFF</color>
+    <color name="smallButtonColor">#BF909497</color>
+    <color name="whiteColor">#ffffff</color>
+    <color name="blackColor">#000</color>
+    <color name="menuBackgroundSelected">#000000</color>
+    <color name="menuBackgroundUnselected">#BFEF5350</color>
+    <color name="transparent">#80FFFFFF</color>
+
+</resources>

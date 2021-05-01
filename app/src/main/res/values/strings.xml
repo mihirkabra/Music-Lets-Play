@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Music</string>
+    <string name="title_activity_music_player">MusicPlayer</string>
+    <string name="link"><sup> [↗]</sup></string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Play"
+        android:id="@+id/music_more_menu_play"
+        />
+    <item
+        android:title="Add to Playlist"
+        android:id="@+id/music_more_menu_add"
+        />
+</menu>

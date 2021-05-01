@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Play"
+        android:id="@+id/playlist_song_more_menu_play"
+        />
+    <item
+        android:title="Remove from Playlist"
+        android:id="@+id/playlist_song_more_menu_remove"
+        />
+</menu>
