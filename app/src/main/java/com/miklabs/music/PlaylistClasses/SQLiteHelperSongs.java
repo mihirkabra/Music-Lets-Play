@@ -1,7 +1,5 @@
 package com.miklabs.music.PlaylistClasses;
 
-import static com.miklabs.music.MainActivity.PlaylistNameForSongs;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,11 +57,9 @@ public class SQLiteHelperSongs extends SQLiteOpenHelper {
                 String data = mCursor.getString(4);
                 String duration = mCursor.getString(5);
                 File file = new File(Uri.parse(data).getPath());
-                if(file.exists()) {
+                if (file.exists()) {
                     songs.add(new SongsModel(name, artist, albumart, duration, data));
-                }
-                else
-                {
+                } else {
                     String query = "delete from " + PlaylistNameForSongs + " where SongName ='" + name + "'";
                     Cursor cursor = this.getWritableDatabase().rawQuery(query, null);
                     cursor.close();

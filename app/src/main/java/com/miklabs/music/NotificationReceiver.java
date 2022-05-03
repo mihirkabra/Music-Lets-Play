@@ -8,13 +8,13 @@ import static com.miklabs.music.MusicPlayer.isMute;
 import static com.miklabs.music.MusicPlayer.isRepeat;
 import static com.miklabs.music.MusicPlayer.mediaPlayer;
 import static com.miklabs.music.MusicPlayer.musicSeekbar;
-import static com.miklabs.music.MusicPlayer.songs;
 import static com.miklabs.music.MusicPlayer.paused;
 import static com.miklabs.music.MusicPlayer.play;
 import static com.miklabs.music.MusicPlayer.playing;
 import static com.miklabs.music.MusicPlayer.position;
 import static com.miklabs.music.MusicPlayer.songImage;
 import static com.miklabs.music.MusicPlayer.songName;
+import static com.miklabs.music.MusicPlayer.songs;
 import static com.miklabs.music.MusicPlayer.totalDurationTime;
 import static com.miklabs.music.MusicPlayer.totalTime;
 

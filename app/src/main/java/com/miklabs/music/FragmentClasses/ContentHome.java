@@ -41,8 +41,8 @@ import java.util.concurrent.TimeUnit;
 public class ContentHome extends Fragment {
     public static SharedPreferences.Editor collection;
     public static boolean goingToMusic;
-    SongsModel songsModel;
     public static ArrayList<SongsModel> songs;
+    SongsModel songsModel;
     RecyclerView recyclerView;
     MusicAdapter Adapter;
 

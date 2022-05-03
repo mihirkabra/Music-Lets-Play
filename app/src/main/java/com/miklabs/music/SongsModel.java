@@ -2,7 +2,7 @@ package com.miklabs.music;
 
 import java.io.Serializable;
 
-public class SongsModel implements Serializable{
+public class SongsModel implements Serializable {
 
     String songName;
     String artistName;

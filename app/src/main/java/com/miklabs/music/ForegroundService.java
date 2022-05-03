@@ -1,11 +1,8 @@
 package com.miklabs.music;
 
 import static com.miklabs.music.MusicPlayer.mediaPlayer;
-import static com.miklabs.music.MusicPlayer.songs;
-//import static com.miklabs.music.MusicPlayer.mySongsAlbumID;
-//import static com.miklabs.music.MusicPlayer.mySongsArtist;
-//import static com.miklabs.music.MusicPlayer.mySongsName;
 import static com.miklabs.music.MusicPlayer.position;
+import static com.miklabs.music.MusicPlayer.songs;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

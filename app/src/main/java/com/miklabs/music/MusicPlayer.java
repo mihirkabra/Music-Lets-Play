@@ -60,6 +60,7 @@ public class MusicPlayer extends AppCompatActivity {
     static Boolean isMute = false;
     static Boolean paused = false;
     static ArrayList<SongsModel> songs;
+    private final Handler mHandler = new Handler();
     File file;
     PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
@@ -99,9 +100,6 @@ public class MusicPlayer extends AppCompatActivity {
     };
     String sname, artistname, song;
     Handler handler = new Handler();
-    int mCurrentPosition;
-    SharedPreferences db;
-    private final Handler mHandler = new Handler();
     //static ArrayList<Integer> mySongsAlbumID;
     private final Runnable UpdateSongTime = new Runnable() {
 
@@ -119,6 +117,8 @@ public class MusicPlayer extends AppCompatActivity {
             handler.postDelayed(this, 100);
         }
     };
+    int mCurrentPosition;
+    SharedPreferences db;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -241,8 +241,7 @@ public class MusicPlayer extends AppCompatActivity {
 
         file = new File(u.getPath());
 
-        if(file.exists())
-        {
+        if (file.exists()) {
             mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
 
             mediaPlayer.start();
@@ -256,9 +255,7 @@ public class MusicPlayer extends AppCompatActivity {
             UpdateSeekbar();
 
             mediaPlayer.seekTo(mCurrentPosition);
-        }
-        else
-        {
+        } else {
             position = ((position + 1) % songs.size());
             collection.putInt("pos", position);
             collection.putInt("currentpos", 0);
@@ -367,12 +364,9 @@ public class MusicPlayer extends AppCompatActivity {
 
             Uri u1 = Uri.parse(song);
 
-            if(new File(u1.getPath()).exists())
-            {
+            if (new File(u1.getPath()).exists()) {
                 mediaPlayer = MediaPlayer.create(MusicPlayer.this, u1);
-            }
-            else
-            {
+            } else {
                 position = ((position + 1) % songs.size());
                 collection.putInt("pos", position);
                 collection.putInt("currentpos", 0);
@@ -536,12 +530,9 @@ public class MusicPlayer extends AppCompatActivity {
 
         file = new File(u.getPath());
 
-        if(file.exists())
-        {
+        if (file.exists()) {
             mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
-        }
-        else
-        {
+        } else {
             position = ((position + 1) % songs.size());
             collection.putInt("pos", position);
             collection.putInt("currentpos", 0);
