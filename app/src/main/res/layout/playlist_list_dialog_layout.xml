@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playlist_list_card_dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="6dp"
-    app:cardBackgroundColor="#CD414141"
     android:padding="2dp"
-    android:id="@+id/playlist_list_card_dialog">
+    app:cardBackgroundColor="#CD414141"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,8 +28,8 @@
                 android:layout_width="45sp"
                 android:layout_height="45sp"
                 android:layout_margin="7sp"
-                android:src="@drawable/logo"
-                />
+                android:src="@drawable/logo" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,8 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
 
                     <TextView
@@ -51,8 +50,8 @@
                         android:layout_marginLeft="15sp"
                         android:text="Playlist Name"
                         android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -60,4 +59,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

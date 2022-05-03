@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:title="Play"
         android:id="@+id/playlist_more_menu_play"
-        />
+        android:title="Play" />
     <item
-        android:title="Add Songs"
         android:id="@+id/playlist_more_menu_add"
-        />
+        android:title="Add Songs" />
     <item
-        android:title="Rename Playlist"
         android:id="@+id/playlist_more_menu_rename"
-        />
+        android:title="Rename Playlist" />
     <item
-        android:title="Delete Playlist"
         android:id="@+id/playlist_more_menu_delete"
-        />
+        android:title="Delete Playlist" />
 
 </menu>

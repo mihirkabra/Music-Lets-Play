@@ -5,8 +5,7 @@
     <item
         android:id="@+id/songs_options_menu"
         android:icon="@drawable/icon_menu_more"
-        app:showAsAction="ifRoom"
-        android:title="Options">
-    </item>
+        android:title="Options"
+        app:showAsAction="ifRoom"></item>
 
 </menu>

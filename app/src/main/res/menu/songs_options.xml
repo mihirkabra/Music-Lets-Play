@@ -2,12 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Add Songs"
         android:id="@+id/songs_more_menu_add"
-        />
+        android:title="Add Songs" />
     <item
-        android:title="Rename Playlist"
         android:id="@+id/songs_more_menu_rename"
-        />
+        android:title="Rename Playlist" />
 
 </menu>

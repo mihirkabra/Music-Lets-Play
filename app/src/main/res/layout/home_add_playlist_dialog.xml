@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    app:cardBackgroundColor="#ff0000"
-    app:cardCornerRadius="15dp"
     android:layout_margin="20sp"
-    >
+    app:cardBackgroundColor="#ff0000"
+    app:cardCornerRadius="15dp">
 
     <RelativeLayout
         android:id="@+id/home_dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/home_dialog_close"
@@ -47,16 +45,16 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/circle_filled"
                     android:padding="3sp">
-                <ImageView
-                    android:layout_width="36sp"
-                    android:layout_height="37.5sp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/icon_add_playlist_red"
-                    android:backgroundTint="@color/colorPrimary"
-                    />
+
+                    <ImageView
+                        android:layout_width="36sp"
+                        android:layout_height="37.5sp"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:src="@drawable/icon_add_playlist_red" />
                 </LinearLayout>
 
-                <android.support.v4.widget.Space
+                <Space
                     android:layout_width="10sp"
                     android:layout_height="wrap_content" />
 
@@ -67,8 +65,7 @@
                     android:text="Add New Playlist"
                     android:textColor="@color/whiteColor"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <EditText
@@ -101,46 +98,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:weightSum="10"
-                >
+                android:weightSum="10">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5sp"
-                app:cardBackgroundColor="@color/colorPrimary"
-                app:cardCornerRadius="12sp"
-                app:cardElevation="7sp"
-                android:layout_weight="1.75"
-                >
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/home_dialog_recycler"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="4sp"
-                    android:layout_marginBottom="4sp"
-                    />
-            </android.support.v7.widget.CardView>
+                    android:layout_margin="5sp"
+                    android:layout_weight="1.75"
+                    app:cardBackgroundColor="@color/colorPrimary"
+                    app:cardCornerRadius="12sp"
+                    app:cardElevation="7sp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/home_dialog_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4sp"
+                        android:layout_marginBottom="4sp" />
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="8.25"
-                    android:gravity="center"
-                    >
-            <Button
-                android:id="@+id/home_dialog_create_btn"
-                android:layout_width="150sp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:background="@drawable/button_shape"
-                android:fontFamily="@font/font"
-                android:text="Create  Playlist"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/home_dialog_create_btn"
+                        android:layout_width="150sp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_shape"
+                        android:fontFamily="@font/font"
+                        android:gravity="center"
+                        android:text="Create  Playlist"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -149,4 +142,4 @@
 
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

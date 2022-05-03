@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="5sp">
-    <android.support.v7.widget.CardView
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="20sp"
         app:cardBackgroundColor="#575757"
-        app:cardCornerRadius="15dp"
-        android:layout_margin="20sp">
+        app:cardCornerRadius="15dp">
 
         <RelativeLayout
             android:id="@+id/dialogAdd_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:gravity="center">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-                <android.support.v4.widget.Space
+                <Space
                     android:layout_width="match_parent"
                     android:layout_height="10sp" />
 
 
                 <TextView
+                    android:id="@+id/dialogAdd_text"
                     android:layout_width="match_parent"
                     android:layout_height="40sp"
+                    android:layout_margin="5sp"
                     android:fontFamily="@font/font"
+                    android:gravity="center"
                     android:text="Select the Playlist"
                     android:textColor="@color/whiteColor"
                     android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:layout_margin="5sp"
-                    android:gravity="center"
-                    android:id="@+id/dialogAdd_text" />
-                <android.support.v4.widget.Space
+                    android:textStyle="bold" />
+
+                <Space
                     android:layout_width="match_parent"
                     android:layout_height="15sp" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="400sp"
                     android:layout_margin="5sp"
+                    android:layout_weight="1.5"
                     app:cardBackgroundColor="#80000000"
                     app:cardCornerRadius="12sp"
-                    app:cardElevation="7sp"
-                    android:layout_weight="1.5"
-                    >
+                    app:cardElevation="7sp">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/dialogAdd_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4sp"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dialogAdd_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4sp"
 
-                    />
-                </android.support.v7.widget.CardView>
+                        />
+                </androidx.cardview.widget.CardView>
 
-                <android.support.v4.widget.Space
+                <Space
                     android:layout_width="match_parent"
                     android:layout_height="10sp" />
 
@@ -74,25 +74,26 @@
                     android:id="@+id/dialogAdd_close"
                     android:layout_width="150sp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:background="@drawable/button_shape"
                     android:backgroundTint="#000"
                     android:fontFamily="@font/font"
+                    android:gravity="center"
                     android:text="Close"
                     android:textColor="#fff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-                <android.support.v4.widget.Space
+
+                <Space
                     android:layout_width="match_parent"
                     android:layout_height="10sp" />
 
-                <android.support.v4.widget.Space
+                <Space
                     android:layout_width="match_parent"
                     android:layout_height="15sp" />
             </LinearLayout>
 
 
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

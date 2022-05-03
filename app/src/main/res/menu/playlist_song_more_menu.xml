@@ -2,11 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Play"
         android:id="@+id/playlist_song_more_menu_play"
-        />
+        android:title="Play" />
     <item
-        android:title="Remove from Playlist"
         android:id="@+id/playlist_song_more_menu_remove"
-        />
+        android:title="Remove from Playlist" />
 </menu>

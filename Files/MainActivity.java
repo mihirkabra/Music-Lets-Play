@@ -1,4 +1,4 @@
-package com.example.music;
+package com.miklabs.music;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -13,25 +13,25 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.RequiresApi;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 
-import com.example.music.Menu.DrawerAdapter;
-import com.example.music.Menu.DrawerItem;
-import com.example.music.Menu.SimpleItem;
-import com.example.music.Menu.SpaceItem;
+import com.miklabs.music.Menu.DrawerAdapter;
+import com.miklabs.music.Menu.DrawerItem;
+import com.miklabs.music.Menu.SimpleItem;
+import com.miklabs.music.Menu.SpaceItem;
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.music.MusicPlayer.mediaPlayer;
+import static com.miklabs.music.MusicPlayer.mediaPlayer;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, DrawerAdapter.OnItemSelectedListener {
 
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 arrayListName.add(currentTitle);
                 arrayListData.add(currentData);
                 arrayListArtist.add(currentArtist);
-                arrayListDuration.add("• " + String.format("%02d:%02d",
+                arrayListDuration.add("ï¿½ " + String.format("%02d:%02d",
                         TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
                         TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
