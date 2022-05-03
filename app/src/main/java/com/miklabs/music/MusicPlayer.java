@@ -36,6 +36,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +60,7 @@ public class MusicPlayer extends AppCompatActivity {
     static Boolean isMute = false;
     static Boolean paused = false;
     static ArrayList<SongsModel> songs;
+    File file;
     PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -237,19 +239,33 @@ public class MusicPlayer extends AppCompatActivity {
 
         Uri u = Uri.parse(song);
 
-        mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
+        file = new File(u.getPath());
 
-        mediaPlayer.start();
+        if(file.exists())
+        {
+            mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
 
-        musicSeekbar.setMax(mediaPlayer.getDuration());
+            mediaPlayer.start();
 
-        setTotalTime();
+            musicSeekbar.setMax(mediaPlayer.getDuration());
 
-        startService(position);
+            setTotalTime();
 
-        UpdateSeekbar();
+            startService(position);
 
-        mediaPlayer.seekTo(mCurrentPosition);
+            UpdateSeekbar();
+
+            mediaPlayer.seekTo(mCurrentPosition);
+        }
+        else
+        {
+            position = ((position + 1) % songs.size());
+            collection.putInt("pos", position);
+            collection.putInt("currentpos", 0);
+            collection.commit();
+
+            configMediaPlayer();
+        }
 
         if (!playing) {
             playing = true;
@@ -351,7 +367,20 @@ public class MusicPlayer extends AppCompatActivity {
 
             Uri u1 = Uri.parse(song);
 
-            mediaPlayer = MediaPlayer.create(MusicPlayer.this, u1);
+            if(new File(u1.getPath()).exists())
+            {
+                mediaPlayer = MediaPlayer.create(MusicPlayer.this, u1);
+            }
+            else
+            {
+                position = ((position + 1) % songs.size());
+                collection.putInt("pos", position);
+                collection.putInt("currentpos", 0);
+                collection.commit();
+
+
+                configMediaPlayer();
+            }
 
             songName.setText(sname);
 
@@ -501,12 +530,25 @@ public class MusicPlayer extends AppCompatActivity {
 
     public void configMediaPlayer() {
 
-
         song = songs.get(position).getData();
 
         Uri u = Uri.parse(song);
 
-        mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
+        file = new File(u.getPath());
+
+        if(file.exists())
+        {
+            mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
+        }
+        else
+        {
+            position = ((position + 1) % songs.size());
+            collection.putInt("pos", position);
+            collection.putInt("currentpos", 0);
+            collection.commit();
+
+            configMediaPlayer();
+        }
 
         sname = songs.get(position).getSongName();
 
@@ -527,6 +569,7 @@ public class MusicPlayer extends AppCompatActivity {
         startService(position);
 
         UpdateSeekbar();
+
         mediaPlayer.seekTo(mCurrentPosition);
 
 
