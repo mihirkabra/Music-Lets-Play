@@ -3,14 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout-v16/item_option.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout-v16/menu_left_drawer.xml" value="0.20416666666666666" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/about_us_layout.xml" value="0.1" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/activity_music_player.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/activity_songs.xml" value="0.20416666666666666" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/activity_splash_screen.xml" value="0.20416666666666666" />
-        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/dialog_add.xml" value="0.17481884057971014" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/content_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/custom_notify.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/custom_notify_expanded.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/dialog_add.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/dialog_add_songs.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/dialog_rename.xml" value="0.20416666666666666" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/dialog_simple.xml" value="0.20416666666666666" />
-        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/home_add_playlist_dialog.xml" value="0.1" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/equaliser_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/home_add_playlist_dialog.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/home_dialog_recycler_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/music_list_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/playlist_layout.xml" value="0.1" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/playlist_list_dialog_layout.xml" value="0.1" />
-        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/playlist_list_layout.xml" value="0.1" />
+        <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/playlist_list_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/playlist_main.xml" value="0.1" />
         <entry key="..\:/mihir/new/Music - GIT/app/src/main/res/layout/playlist_song_list.xml" value="0.1" />
       </map>

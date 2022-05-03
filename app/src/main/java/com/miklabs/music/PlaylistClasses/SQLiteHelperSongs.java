@@ -1,10 +1,16 @@
 package com.miklabs.music.PlaylistClasses;
 
+import static com.miklabs.music.MainActivity.PlaylistNameForSongs;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
+import com.miklabs.music.SongsModel;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class SQLiteHelperSongs extends SQLiteOpenHelper {
@@ -40,90 +46,118 @@ public class SQLiteHelperSongs extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<String> getSongNames(String PlaylistNameForSongs) {
-        ArrayList<String> SongName = new ArrayList<>();
+    public ArrayList<SongsModel> getSongs(String PlaylistNameForSongs) {
+        ArrayList<SongsModel> songs = new ArrayList<>();
 
-        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_Name + " FROM " + PlaylistNameForSongs, null);
+        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT * FROM " + PlaylistNameForSongs, null);
 
         if (mCursor.moveToFirst()) {
             do {
-                String s = mCursor.getString(0);
-                SongName.add(s);
+                String name = mCursor.getString(1);
+                String artist = mCursor.getString(2);
+                int albumart = mCursor.getInt(3);
+                String data = mCursor.getString(4);
+                String duration = mCursor.getString(5);
+                File file = new File(Uri.parse(data).getPath());
+                if(file.exists()) {
+                    songs.add(new SongsModel(name, artist, albumart, duration, data));
+                }
+                else
+                {
+                    String query = "delete from " + PlaylistNameForSongs + " where SongName ='" + name + "'";
+                    Cursor cursor = this.getWritableDatabase().rawQuery(query, null);
+                    cursor.close();
+                }
             } while (mCursor.moveToNext());
         }
         mCursor.close();
 
-        return SongName;
-
+        return songs;
     }
 
-    public ArrayList<String> getArtistNames(String PlaylistNameForSongs) {
-        ArrayList<String> ArtistName = new ArrayList<>();
-
-        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_Artist + " FROM " + PlaylistNameForSongs, null);
-
-        if (mCursor.moveToFirst()) {
-            do {
-                String s = mCursor.getString(0);
-                ArtistName.add(s);
-            } while (mCursor.moveToNext());
-        }
-        mCursor.close();
-
-        return ArtistName;
-
-    }
-
-    public ArrayList<String> getSongData(String PlaylistNameForSongs) {
-        ArrayList<String> SongData = new ArrayList<>();
-
-        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_SongDATA + " FROM " + PlaylistNameForSongs, null);
-
-        if (mCursor.moveToFirst()) {
-            do {
-                String s = mCursor.getString(0);
-                SongData.add(s);
-            } while (mCursor.moveToNext());
-        }
-        mCursor.close();
-
-        return SongData;
-
-    }
-
-    public ArrayList<Integer> getSongId(String PlaylistNameForSongs) {
-        ArrayList<Integer> SongIDs = new ArrayList<>();
-
-        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_SongID + " FROM " + PlaylistNameForSongs, null);
-
-        if (mCursor.moveToFirst()) {
-            do {
-                String s = mCursor.getString(0);
-                SongIDs.add(Integer.parseInt(s));
-            } while (mCursor.moveToNext());
-        }
-        mCursor.close();
-
-        return SongIDs;
-
-    }
-
-    public ArrayList<String> getSongDuration(String PlaylistNameForSongs) {
-        ArrayList<String> duration = new ArrayList<>();
-
-        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_SongDuration + " FROM " + PlaylistNameForSongs, null);
-
-        if (mCursor.moveToFirst()) {
-            do {
-                String s = mCursor.getString(0);
-                duration.add(s);
-            } while (mCursor.moveToNext());
-        }
-        mCursor.close();
-
-        return duration;
-
-    }
+//    public ArrayList<String> getSongNames(String PlaylistNameForSongs) {
+//        ArrayList<String> SongName = new ArrayList<>();
+//
+//        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_Name + " FROM " + PlaylistNameForSongs, null);
+//
+//        if (mCursor.moveToFirst()) {
+//            do {
+//                String s = mCursor.getString(0);
+//                SongName.add(s);
+//            } while (mCursor.moveToNext());
+//        }
+//        mCursor.close();
+//
+//        return SongName;
+//
+//    }
+//
+//    public ArrayList<String> getArtistNames(String PlaylistNameForSongs) {
+//        ArrayList<String> ArtistName = new ArrayList<>();
+//
+//        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_Artist + " FROM " + PlaylistNameForSongs, null);
+//
+//        if (mCursor.moveToFirst()) {
+//            do {
+//                String s = mCursor.getString(0);
+//                ArtistName.add(s);
+//            } while (mCursor.moveToNext());
+//        }
+//        mCursor.close();
+//
+//        return ArtistName;
+//
+//    }
+//
+//    public ArrayList<String> getSongData(String PlaylistNameForSongs) {
+//        ArrayList<String> SongData = new ArrayList<>();
+//
+//        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_SongDATA + " FROM " + PlaylistNameForSongs, null);
+//
+//        if (mCursor.moveToFirst()) {
+//            do {
+//                String s = mCursor.getString(0);
+//                SongData.add(s);
+//            } while (mCursor.moveToNext());
+//        }
+//        mCursor.close();
+//
+//        return SongData;
+//
+//    }
+//
+//    public ArrayList<Integer> getSongId(String PlaylistNameForSongs) {
+//        ArrayList<Integer> SongIDs = new ArrayList<>();
+//
+//        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_SongID + " FROM " + PlaylistNameForSongs, null);
+//
+//        if (mCursor.moveToFirst()) {
+//            do {
+//                String s = mCursor.getString(0);
+//                SongIDs.add(Integer.parseInt(s));
+//            } while (mCursor.moveToNext());
+//        }
+//        mCursor.close();
+//
+//        return SongIDs;
+//
+//    }
+//
+//    public ArrayList<String> getSongDuration(String PlaylistNameForSongs) {
+//        ArrayList<String> duration = new ArrayList<>();
+//
+//        Cursor mCursor = this.getReadableDatabase().rawQuery("SELECT " + Table_Song_SongDuration + " FROM " + PlaylistNameForSongs, null);
+//
+//        if (mCursor.moveToFirst()) {
+//            do {
+//                String s = mCursor.getString(0);
+//                duration.add(s);
+//            } while (mCursor.moveToNext());
+//        }
+//        mCursor.close();
+//
+//        return duration;
+//    }
 
 }
 

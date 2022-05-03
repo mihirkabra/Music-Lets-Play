@@ -16,25 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.miklabs.music.R;
+import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.MyViewHolder> {
 
-    ArrayList ID;
-    ArrayList NAME;
-    ArrayList ARTIST;
-    ArrayList DATA;
-    ArrayList SONG_FRAGMENT_DURATION;
+    ArrayList<SongsModel> songs;
     Context context;
 
-    public SongsAdapter(ArrayList ID, ArrayList NAME, ArrayList ARTIST, ArrayList DATA, ArrayList SONG_FRAGMENT_DURATION, Context context) {
-        this.ID = ID;
-        this.NAME = NAME;
-        this.ARTIST = ARTIST;
-        this.DATA = DATA;
+    public SongsAdapter(Context context, ArrayList<SongsModel> songs) {
         this.context = context;
-        this.SONG_FRAGMENT_DURATION = SONG_FRAGMENT_DURATION;
+        this.songs = songs;
     }
 
     @NonNull
@@ -49,11 +42,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String songname, artistname, du;
 
-        songname = NAME.get(position).toString();
-        artistname = ARTIST.get(position).toString();
-        du = SONG_FRAGMENT_DURATION.get(position).toString();
+        songname = songs.get(position).getSongName();
+        artistname = songs.get(position).getArtistName();
+        du = songs.get(position).getDuration();
 
-        loadAlbumArt((Integer) ID.get(position), holder.albumArt);
+        loadAlbumArt(songs.get(position).getAlbumArt(), holder.albumArt);
         holder.songName.setText(songname);
         holder.artistName.setText(artistname);
         holder.time.setText(du);
@@ -61,7 +54,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return ID.size();
+        return songs.size();
     }
 
     public void loadAlbumArt(int albumId, ImageView view) {
@@ -72,7 +65,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.MyViewHolder
         Glide.with(view.getContext()).load(path).override(250, 250).error(mDefaultBackground).into(view);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView artistName, songName, time;
         public ImageView albumArt;
@@ -81,11 +74,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.MyViewHolder
         public MyViewHolder(@NonNull View view) {
             super(view);
 
-            artistName = (TextView) view.findViewById(R.id.layout_artist);
-            songName = (TextView) view.findViewById(R.id.layout_name);
-            time = (TextView) view.findViewById(R.id.layout_duration);
-            cardView = (CardView) view.findViewById(R.id.musicListCard);
-            albumArt = (ImageView) view.findViewById(R.id.layout_image);
+            artistName = view.findViewById(R.id.layout_artist);
+            songName = view.findViewById(R.id.layout_name);
+            time = view.findViewById(R.id.layout_duration);
+            cardView = view.findViewById(R.id.musicListCard);
+            albumArt = view.findViewById(R.id.layout_image);
         }
     }
 }

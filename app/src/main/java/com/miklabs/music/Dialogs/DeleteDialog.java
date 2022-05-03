@@ -56,12 +56,12 @@ public class DeleteDialog extends Dialog {
 
         mainActivity = new MainActivity();
 
-        text = (TextView) dialog.findViewById(R.id.dialogSimple_text);
-        text_NO = (TextView) dialog.findViewById(R.id.dialogSimple_NO);
+        text = dialog.findViewById(R.id.dialogSimple_text);
+        text_NO = dialog.findViewById(R.id.dialogSimple_NO);
 
-        image = (ImageView) dialog.findViewById(R.id.dialogSimple_image);
+        image = dialog.findViewById(R.id.dialogSimple_image);
 
-        button_YES = (Button) dialog.findViewById(R.id.dialogSimple_YES);
+        button_YES = dialog.findViewById(R.id.dialogSimple_YES);
 
         name = Playlists.PlaylistName.get(posOfPlaylist);
 
@@ -71,50 +71,40 @@ public class DeleteDialog extends Dialog {
         sqLiteHelperPlaylist = new SQLiteHelperPlaylist(activity);
         sqLiteHelperSongs = new SQLiteHelperSongs(activity);
 
-        text_NO.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        text_NO.setOnClickListener(v -> dialog.dismiss());
+        button_YES.setOnClickListener(v -> {
 
-                dialog.dismiss();
+            sqLiteDatabaseObj = openOrCreateDatabase("/data/data/com.miklabs.music/databases/PlaylistSongs.db", new SQLiteDatabase.CursorFactory() {
+                @Override
+                public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver masterQuery, String editTable, SQLiteQuery query) {
+                    //Assign the values of masterQuery,query,editTable as per your requirements
+                    return new SQLiteCursor(masterQuery, editTable, query);
+                }
+            }, null);
 
-            }
-        });
-        button_YES.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            sqLiteDatabaseObj.execSQL("delete from " + name);
+            sqLiteDatabaseObj.close();
 
-                sqLiteDatabaseObj = openOrCreateDatabase("/data/data/com.miklabs.music/databases/PlaylistSongs.db", new SQLiteDatabase.CursorFactory() {
-                    @Override
-                    public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver masterQuery, String editTable, SQLiteQuery query) {
-                        //Assign the values of masterQuery,query,editTable as per your requirements
-                        return new SQLiteCursor(masterQuery, editTable, query);
-                    }
-                }, null);
-
-                sqLiteDatabaseObj.execSQL("delete from " + name);
-                sqLiteDatabaseObj.close();
-
-                sqLiteDatabaseObj = openOrCreateDatabase("/data/data/com.miklabs.music/databases/Playlists.db", new SQLiteDatabase.CursorFactory() {
-                    @Override
-                    public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver masterQuery, String editTable, SQLiteQuery query) {
-                        //Assign the values of masterQuery,query,editTable as per your requirements
-                        return new SQLiteCursor(masterQuery, editTable, query);
-                    }
-                }, null);
+            sqLiteDatabaseObj = openOrCreateDatabase("/data/data/com.miklabs.music/databases/Playlists.db", new SQLiteDatabase.CursorFactory() {
+                @Override
+                public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver masterQuery, String editTable, SQLiteQuery query) {
+                    //Assign the values of masterQuery,query,editTable as per your requirements
+                    return new SQLiteCursor(masterQuery, editTable, query);
+                }
+            }, null);
 
 
-                SQLiteDataBaseQueryHolder = "delete from Playlist where PlaylistName ='" + name + "'";
-                sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
-                sqLiteDatabaseObj.close();
+            SQLiteDataBaseQueryHolder = "delete from Playlist where PlaylistName ='" + name + "'";
+            sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
+            sqLiteDatabaseObj.close();
 
-                Playlists.PlaylistName.remove(posOfPlaylist);
+            Playlists.PlaylistName.remove(posOfPlaylist);
 
-                Playlists.adapter.notifyDataSetChanged();
+            Playlists.adapter.notifyDataSetChanged();
 
-                dialog.dismiss();
+            dialog.dismiss();
 
-                mainActivity.getSnackBar(activity, MainActivity.layout, "Playlist: " + name + " Successfully Deleted!", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
-            }
+            mainActivity.getSnackBar(activity, MainActivity.layout, "Playlist: " + name + " Successfully Deleted!", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
         });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();

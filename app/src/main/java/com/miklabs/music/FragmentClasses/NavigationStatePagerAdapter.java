@@ -1,5 +1,6 @@
 package com.miklabs.music.FragmentClasses;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -22,6 +23,7 @@ public class NavigationStatePagerAdapter extends FragmentStatePagerAdapter {
         fragmentTitleList.add(title);
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int i) {
         return fragmentList.get(i);

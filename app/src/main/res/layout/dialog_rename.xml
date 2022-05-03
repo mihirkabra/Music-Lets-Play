@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="20sp">
+    android:layout_margin="20dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="20sp"
+        android:layout_margin="20dp"
         app:cardBackgroundColor="#F3575757"
         app:cardCornerRadius="15dp">
 
@@ -29,14 +29,14 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="45sp" />
+                    android:layout_height="30dp" />
 
 
                 <TextView
                     android:id="@+id/dialogRename_text"
                     android:layout_width="match_parent"
-                    android:layout_height="40sp"
-                    android:layout_margin="5sp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:fontFamily="@font/font"
                     android:gravity="center"
                     android:text="Rename the Playlist"
@@ -46,14 +46,15 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
+                    android:layout_height="10dp" />
 
                 <EditText
                     android:id="@+id/dialogRename_edittext"
                     android:layout_width="match_parent"
-                    android:layout_height="45sp"
+                    android:layout_height="45dp"
                     android:layout_gravity="center"
-                    android:layout_margin="10sp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginVertical="5dp"
                     android:background="@drawable/button_shape"
                     android:backgroundTint="#4D000000"
                     android:focusedByDefault="true"
@@ -68,38 +69,47 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="30sp" />
-
-                <Button
-                    android:id="@+id/dialogRename_botton"
-                    android:layout_width="150sp"
+                    android:layout_height="20dp" />
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_shape"
-                    android:backgroundTint="#000"
-                    android:fontFamily="@font/font"
+                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:text="Rename"
-                    android:textColor="#fff"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_marginHorizontal="10dp">
+                    <Button
+                        android:id="@+id/dialogRename_botton"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_shape"
+                        android:backgroundTint="#000"
+                        android:fontFamily="@font/font"
+                        android:gravity="center"
+                        android:text="Rename"
+                        android:textColor="#fff"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/dialogRename_close"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font"
+                        android:gravity="center"
+                        android:text="CLOSE"
+                        android:textColor="#99FFFFFF"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
-
-                <TextView
-                    android:id="@+id/dialogRename_close"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    android:gravity="center"
-                    android:text="CLOSE"
-                    android:textColor="#99FFFFFF"
-                    android:textSize="20sp" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="45sp" />
+                    android:layout_height="30dp" />
             </LinearLayout>
 
 

@@ -8,7 +8,7 @@
 
 
     <LinearLayout
-        android:layout_width="275sp"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -18,7 +18,7 @@
             android:id="@+id/notify_expand_Nme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10sp"
+            android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
             android:text="Song Name"
             android:textColor="#FFFFFF"
@@ -28,8 +28,8 @@
             android:id="@+id/notify_expand_Artist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10sp"
-            android:layout_marginTop="3sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
             android:gravity="center_vertical"
             android:text="Artist Name"
             android:textColor="#BFffffff" />
@@ -37,43 +37,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/notify_expand_shuffleBtn"
-                android:layout_width="35sp"
-                android:layout_height="35sp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:background="@drawable/button_shuffle_2"
                 android:backgroundTint="#FF3600" />
 
             <Button
                 android:id="@+id/notify_expand_previousBtn"
-                android:layout_width="40sp"
-                android:layout_height="40sp"
-                android:layout_marginLeft="20sp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/button_previous" />
 
             <Button
                 android:id="@+id/notify_expand_playBtn"
-                android:layout_width="40sp"
-                android:layout_height="40sp"
-                android:layout_marginLeft="10sp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/button_play" />
 
             <Button
                 android:id="@+id/notify_expand_nextBtn"
-                android:layout_width="40sp"
-                android:layout_height="40sp"
-                android:layout_marginLeft="10sp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/button_next" />
 
             <Button
                 android:id="@+id/notify_expand_replayBtn"
-                android:layout_width="35sp"
-                android:layout_height="35sp"
-                android:layout_marginLeft="20sp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/button_replay"
                 android:backgroundTint="#FF3600" />
 
@@ -83,10 +83,10 @@
 
     <ImageView
         android:id="@+id/notify_expand_Image"
-        android:layout_width="125sp"
-        android:layout_height="125sp"
-        android:layout_margin="7sp"
-        android:layout_marginLeft="15sp"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_margin="7dp"
+        android:layout_marginLeft="15dp"
         android:src="@drawable/logo" />
 
 </LinearLayout>

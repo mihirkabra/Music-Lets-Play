@@ -58,7 +58,7 @@ public class MusicPlayer extends AppCompatActivity {
     static Boolean isRepeat = false;
     static Boolean isMute = false;
     static Boolean paused = false;
-    static ArrayList<String> mySongs, mySongsName, mySongsArtist, mySongsAlbumID;
+    static ArrayList<SongsModel> songs;
     PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -99,9 +99,9 @@ public class MusicPlayer extends AppCompatActivity {
     Handler handler = new Handler();
     int mCurrentPosition;
     SharedPreferences db;
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
     //static ArrayList<Integer> mySongsAlbumID;
-    private Runnable UpdateSongTime = new Runnable() {
+    private final Runnable UpdateSongTime = new Runnable() {
 
         public void run() {
 
@@ -115,7 +115,6 @@ public class MusicPlayer extends AppCompatActivity {
             );
 
             handler.postDelayed(this, 100);
-
         }
     };
 
@@ -125,7 +124,6 @@ public class MusicPlayer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
 
-
         TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -134,35 +132,31 @@ public class MusicPlayer extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.splashScreenStatusBar));
 
+        play = findViewById(R.id.btnPlay);
 
-        play = (Button) findViewById(R.id.btnPlay);
+        next = findViewById(R.id.btnNext);
 
-        next = (Button) findViewById(R.id.btnNext);
+        previous = findViewById(R.id.btnPrevious);
 
-        previous = (Button) findViewById(R.id.btnPrevious);
+        repeat = findViewById(R.id.btnRepeat);
 
-        repeat = (ToggleButton) findViewById(R.id.btnRepeat);
+        shuffle = findViewById(R.id.btnShuffle);
 
-        shuffle = (Button) findViewById(R.id.btnShuffle);
+        replay = findViewById(R.id.btnReplay);
 
-        replay = (Button) findViewById(R.id.btnReplay);
+        mute = findViewById(R.id.btnMute);
 
-        mute = (ToggleButton) findViewById(R.id.btnMute);
+        currentTime = findViewById(R.id.timePlayed);
 
+        totalTime = findViewById(R.id.timeTotal);
 
-        currentTime = (TextView) findViewById(R.id.timePlayed);
+        songName = findViewById(R.id.songName);
 
-        totalTime = (TextView) findViewById(R.id.timeTotal);
+        artistName = findViewById(R.id.songArtistName);
 
-        songName = (TextView) findViewById(R.id.songName);
+        musicSeekbar = findViewById(R.id.musicSeekbar);
 
-        artistName = (TextView) findViewById(R.id.songArtistName);
-
-
-        musicSeekbar = (SeekBar) findViewById(R.id.musicSeekbar);
-
-
-        songImage = (ImageView) findViewById(R.id.songImg);
+        songImage = findViewById(R.id.songImg);
 
         songImage.setOnTouchListener(new OnSwipeTouchListener(MusicPlayer.this) {
             public void onSwipeRight() {
@@ -171,7 +165,7 @@ public class MusicPlayer extends AppCompatActivity {
 
                 mediaPlayer.release();
 
-                position = ((position - 1) < 0) ? (mySongs.size() - 1) : (position - 1);
+                position = ((position - 1) < 0) ? (songs.size() - 1) : (position - 1);
                 collection.putInt("pos", position);
                 collection.putInt("currentpos", 0);
                 collection.commit();
@@ -189,7 +183,7 @@ public class MusicPlayer extends AppCompatActivity {
 
                 mediaPlayer.release();
 
-                position = ((position + 1) % mySongs.size());
+                position = ((position + 1) % songs.size());
                 collection.putInt("pos", position);
                 collection.putInt("currentpos", 0);
                 collection.commit();
@@ -200,38 +194,21 @@ public class MusicPlayer extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
-
         });
-
 
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
 
-
         db = PreferenceManager.getDefaultSharedPreferences(MusicPlayer.this);
 
         Gson gson = new Gson();
+
         String arrayListStringSongName = db.getString("songs", null);
-        Type typeSongName = new TypeToken<ArrayList<String>>() {
+        Type typeSongName = new TypeToken<ArrayList<SongsModel>>() {
         }.getType();
-        mySongs = gson.fromJson(arrayListStringSongName, typeSongName);
-
-        String arrayListStringArtistName = db.getString("artist", null);
-        Type typeArtistName = new TypeToken<ArrayList<String>>() {
-        }.getType();
-        mySongsArtist = gson.fromJson(arrayListStringArtistName, typeArtistName);
-
-        String arrayListStringSong = db.getString("songname", null);
-        Type typeSong = new TypeToken<ArrayList<String>>() {
-        }.getType();
-        mySongsName = gson.fromJson(arrayListStringSong, typeSong);
-
-        String arrayListStringSongID = db.getString("id", null);
-        Type typeID = new TypeToken<ArrayList<String>>() {
-        }.getType();
-        mySongsAlbumID = gson.fromJson(arrayListStringSongID, typeID);
+        songs = gson.fromJson(arrayListStringSongName, typeSongName);
 
         if (goingToMusic) {
             collection.putInt("currentpos", 0);
@@ -240,30 +217,23 @@ public class MusicPlayer extends AppCompatActivity {
             goingToMusic = false;
         }
 
-        //mySongs = (ArrayList) bundle.getParcelableArrayList("songs");
-        //mySongsName = (ArrayList) bundle.getParcelableArrayList("songname");
-        //mySongsAlbumID = (ArrayList) bundle.getParcelableArrayList("id");
-        //mySongsArtist = (ArrayList) bundle.getParcelableArrayList("artist");
-
-
-        //position = bundle.getInt("pos", 0);
         position = db.getInt("pos", 0);
 
-        sname = mySongsName.get(position);
+        sname = songs.get(position).getSongName();
 
-        loadAlbumArt(Integer.parseInt(mySongsAlbumID.get(position)), songImage);
+        loadAlbumArt(songs.get(position).getAlbumArt(), songImage);
 
         songName.setText(sname);
 
         songName.setSelected(true);
 
-        artistname = mySongsArtist.get(position);
+        artistname = songs.get(position).getArtistName();
 
         artistName.setText(artistname);
 
         artistName.setSelected(true);
 
-        song = mySongs.get(position);
+        song = songs.get(position).getData();
 
         Uri u = Uri.parse(song);
 
@@ -278,8 +248,8 @@ public class MusicPlayer extends AppCompatActivity {
         startService(position);
 
         UpdateSeekbar();
-        mediaPlayer.seekTo(mCurrentPosition);
 
+        mediaPlayer.seekTo(mCurrentPosition);
 
         if (!playing) {
             playing = true;
@@ -288,216 +258,162 @@ public class MusicPlayer extends AppCompatActivity {
             paused = false;
         }
 
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
+        mediaPlayer.setOnCompletionListener(mp -> {
 
-                mediaPlayer.stop();
+            mediaPlayer.stop();
 
-                mediaPlayer.release();
+            mediaPlayer.release();
 
-                position = ((position + 1) % mySongs.size());
-                collection.putInt("pos", position);
-                collection.putInt("currentpos", 0);
-                collection.commit();
+            position = ((position + 1) % songs.size());
+            collection.putInt("pos", position);
+            collection.putInt("currentpos", 0);
+            collection.commit();
 
+            configMediaPlayer();
 
-                configMediaPlayer();
-
-            }
         });
 
+        play.setOnClickListener(v -> {
+            musicSeekbar.setMax(mediaPlayer.getDuration());
 
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                musicSeekbar.setMax(mediaPlayer.getDuration());
-
-                if (mediaPlayer.isPlaying()) {
-                    play.setBackgroundResource(R.drawable.button_play);
-                    mediaPlayer.pause();
-                    playing = false;
-                    paused = true;
-                    startService(position);
-                } else {
-                    play.setBackgroundResource(R.drawable.button_pause);
-                    mediaPlayer.start();
-                    playing = true;
-                    paused = false;
-                    startService(position);
-                }
-            }
-        });
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mediaPlayer.stop();
-
-                mediaPlayer.release();
-
-                position = ((position + 1) % mySongs.size());
-                collection.putInt("pos", position);
-                collection.putInt("currentpos", 0);
-                collection.commit();
-
-
-                configMediaPlayer();
-
-            }
-        });
-
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mediaPlayer.stop();
-
-                mediaPlayer.release();
-
-                position = ((position - 1) < 0) ? (mySongs.size() - 1) : (position - 1);
-                collection.putInt("pos", position);
-                collection.putInt("currentpos", 0);
-                collection.commit();
-
-
-                configMediaPlayer();
-
-            }
-        });
-
-        shuffle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                position = 0;
-
-
-                long seed = System.nanoTime();
-
-                Collections.shuffle(mySongs, new Random(seed));
-
-                Collections.shuffle(mySongsName, new Random(seed));
-
-                Collections.shuffle(mySongsAlbumID, new Random(seed));
-
-                Collections.shuffle(mySongsArtist, new Random(seed));
-
-                Gson gson0 = new Gson();
-                String songs = gson0.toJson(mySongs);
-                collection.putString("songs", songs);
-
-                Gson gson1 = new Gson();
-                String songname = gson1.toJson(mySongsName);
-                collection.putString("songname", songname);
-
-                Gson gson2 = new Gson();
-                String ID = gson2.toJson(mySongsAlbumID);
-                collection.putString("id", ID);
-
-
-                Gson gson3 = new Gson();
-                String artist = gson3.toJson(mySongsArtist);
-                collection.putString("artist", artist);
-
-
-                collection.commit();
-
-
-                mediaPlayer.stop();
-
-                mediaPlayer.release();
-
-                sname = mySongsName.get(position).toString();
-
-                //loadAlbumArt(Integer.parseInt(mySongsAlbumID.get(position)), songImage);
-
-                artistname = mySongsArtist.get(position);
-
-                artistName.setText(artistname);
-
-                song = mySongs.get(position);
-
-                Uri u = Uri.parse(song);
-
-                mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
-
-                songName.setText(sname);
-
-                setTotalTime();
-
-                mediaPlayer.start();
-
-                musicSeekbar.setMax(mediaPlayer.getDuration());
-
-                collection.putInt("currentpos", 0);
-                collection.commit();
-
+            if (mediaPlayer.isPlaying()) {
+                play.setBackgroundResource(R.drawable.button_play);
+                mediaPlayer.pause();
+                playing = false;
+                paused = true;
                 startService(position);
-
-
-                UpdateSeekbar();
-                mediaPlayer.seekTo(mCurrentPosition);
-
+            } else {
                 play.setBackgroundResource(R.drawable.button_pause);
-
+                mediaPlayer.start();
                 playing = true;
                 paused = false;
-
-                if (isMute) {
-                    mediaPlayer.setVolume(0, 0);
-                }
-                if (isRepeat) {
-
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-
-                            mediaPlayer.setLooping(true);
-
-                            configMediaPlayer();
-
-                        }
-                    });
-                } else {
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-
-                            mediaPlayer.stop();
-
-                            mediaPlayer.release();
-
-                            position = ((position + 1) % mySongs.size());
-                            collection.putInt("pos", position);
-                            collection.putInt("currentpos", 0);
-                            collection.commit();
-
-
-                            configMediaPlayer();
-
-                        }
-                    });
-                }
-
-
+                startService(position);
             }
         });
 
-        replay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        next.setOnClickListener(v -> {
 
-                mediaPlayer.stop();
+            mediaPlayer.stop();
 
-                mediaPlayer.release();
+            mediaPlayer.release();
 
-                collection.putInt("currentpos", 0);
-                collection.commit();
+            position = ((position + 1) % songs.size());
+            collection.putInt("pos", position);
+            collection.putInt("currentpos", 0);
+            collection.commit();
 
-                configMediaPlayer();
+            configMediaPlayer();
+
+        });
+
+        previous.setOnClickListener(v -> {
+
+            mediaPlayer.stop();
+
+            mediaPlayer.release();
+
+            position = ((position - 1) < 0) ? (songs.size() - 1) : (position - 1);
+            collection.putInt("pos", position);
+            collection.putInt("currentpos", 0);
+            collection.commit();
+
+            configMediaPlayer();
+
+        });
+
+        shuffle.setOnClickListener(v -> {
+
+            position = 0;
+
+            long seed = System.nanoTime();
+
+            Collections.shuffle(songs, new Random(seed));
+
+            Gson songsGson = new Gson();
+            String songsStr = songsGson.toJson(songs);
+            collection.putString("songs", songsStr);
+
+            collection.commit();
+
+            mediaPlayer.stop();
+
+            mediaPlayer.release();
+
+            sname = songs.get(position).getSongName();
+
+            loadAlbumArt(songs.get(position).getAlbumArt(), songImage);
+
+            artistname = songs.get(position).getArtistName();
+
+            artistName.setText(artistname);
+
+            song = songs.get(position).getData();
+
+            Uri u1 = Uri.parse(song);
+
+            mediaPlayer = MediaPlayer.create(MusicPlayer.this, u1);
+
+            songName.setText(sname);
+
+            setTotalTime();
+
+            mediaPlayer.start();
+
+            musicSeekbar.setMax(mediaPlayer.getDuration());
+
+            collection.putInt("currentpos", 0);
+            collection.commit();
+
+            startService(position);
+
+            UpdateSeekbar();
+            mediaPlayer.seekTo(mCurrentPosition);
+
+            play.setBackgroundResource(R.drawable.button_pause);
+
+            playing = true;
+            paused = false;
+
+            if (isMute) {
+                mediaPlayer.setVolume(0, 0);
             }
+            if (isRepeat) {
+
+                mediaPlayer.setOnCompletionListener(mp -> {
+
+                    mediaPlayer.setLooping(true);
+
+                    configMediaPlayer();
+
+                });
+            } else {
+                mediaPlayer.setOnCompletionListener(mp -> {
+
+                    mediaPlayer.stop();
+
+                    mediaPlayer.release();
+
+                    position = ((position + 1) % songs.size());
+                    collection.putInt("pos", position);
+                    collection.putInt("currentpos", 0);
+                    collection.commit();
+
+                    configMediaPlayer();
+
+                });
+            }
+        });
+
+        replay.setOnClickListener(v -> {
+
+            mediaPlayer.stop();
+
+            mediaPlayer.release();
+
+            collection.putInt("currentpos", 0);
+            collection.commit();
+
+            configMediaPlayer();
         });
 
         mute.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -517,58 +433,41 @@ public class MusicPlayer extends AppCompatActivity {
         });
 
 
-        repeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        repeat.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-            @RequiresApi(api = Build.VERSION_CODES.M)
+            if (isChecked) {
+                repeat.setBackgroundResource(R.drawable.button_repeat_on);
 
-            @Override
+                mediaPlayer.setOnCompletionListener(mp -> {
 
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mediaPlayer.stop();
 
-                if (isChecked) {
-                    repeat.setBackgroundResource(R.drawable.button_repeat_on);
+                    mediaPlayer.release();
 
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    configMediaPlayer();
 
-                        @Override
+                });
 
-                        public void onCompletion(MediaPlayer mp) {
+                isRepeat = true;
+            } else {
+                repeat.setBackgroundResource(R.drawable.button_repeat_off);
 
-                            mediaPlayer.stop();
+                mediaPlayer.setOnCompletionListener(mp -> {
 
-                            mediaPlayer.release();
+                    mediaPlayer.stop();
 
-                            configMediaPlayer();
+                    mediaPlayer.release();
 
-                        }
-                    });
+                    position = ((position + 1) % songs.size());
+                    collection.putInt("pos", position);
+                    collection.putInt("currentpos", 0);
+                    collection.commit();
 
-                    isRepeat = true;
-                } else {
-                    repeat.setBackgroundResource(R.drawable.button_repeat_off);
+                    configMediaPlayer();
 
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                });
 
-                        @Override
-
-                        public void onCompletion(MediaPlayer mp) {
-
-                            mediaPlayer.stop();
-
-                            mediaPlayer.release();
-
-                            position = ((position + 1) % mySongs.size());
-                            collection.putInt("pos", position);
-                            collection.putInt("currentpos", 0);
-                            collection.commit();
-
-                            configMediaPlayer();
-
-                        }
-                    });
-
-                    isRepeat = false;
-                }
+                isRepeat = false;
             }
         });
 
@@ -603,17 +502,17 @@ public class MusicPlayer extends AppCompatActivity {
     public void configMediaPlayer() {
 
 
-        song = mySongs.get(position);
+        song = songs.get(position).getData();
 
         Uri u = Uri.parse(song);
 
         mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
 
-        sname = mySongsName.get(position).toString();
+        sname = songs.get(position).getSongName();
 
-        loadAlbumArt(Integer.parseInt(mySongsAlbumID.get(position)), songImage);
+        loadAlbumArt(songs.get(position).getAlbumArt(), songImage);
 
-        artistname = mySongsArtist.get(position);
+        artistname = songs.get(position).getArtistName();
 
         artistName.setText(artistname);
 
@@ -641,36 +540,30 @@ public class MusicPlayer extends AppCompatActivity {
         }
 
         if (isRepeat) {
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
+            mediaPlayer.setOnCompletionListener(mp -> {
 
-                    mediaPlayer.setLooping(true);
+                mediaPlayer.setLooping(true);
 
-                    collection.putInt("currentpos", 0);
-                    collection.commit();
-                    configMediaPlayer();
+                collection.putInt("currentpos", 0);
+                collection.commit();
+                configMediaPlayer();
 
-                }
             });
         } else {
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
+            mediaPlayer.setOnCompletionListener(mp -> {
 
-                    mediaPlayer.stop();
+                mediaPlayer.stop();
 
-                    mediaPlayer.release();
+                mediaPlayer.release();
 
-                    position = ((position + 1) % mySongs.size());
-                    collection.putInt("pos", position);
-                    collection.putInt("currentpos", 0);
-                    collection.commit();
+                position = ((position + 1) % songs.size());
+                collection.putInt("pos", position);
+                collection.putInt("currentpos", 0);
+                collection.commit();
 
 
-                    configMediaPlayer();
+                configMediaPlayer();
 
-                }
             });
         }
     }
@@ -735,7 +628,7 @@ public class MusicPlayer extends AppCompatActivity {
         });
     }
 
-    public class OnSwipeTouchListener implements View.OnTouchListener {
+    public static class OnSwipeTouchListener implements View.OnTouchListener {
 
         private final GestureDetector gestureDetector;
 

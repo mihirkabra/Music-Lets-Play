@@ -16,24 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.miklabs.music.R;
+import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
 
 
 public class AddSongsAdapter extends RecyclerView.Adapter<AddSongsAdapter.MyViewHolder> {
 
-
-    public static ArrayList SONG_NAME, ARTIST_NAME, ALBUM_ART, DATA, TIME;
+    ArrayList<SongsModel> songs;
     //#9900FF2A
     private Context mContext;
 
-    public AddSongsAdapter(Context mContext, ArrayList SONG_NAME, ArrayList ARTIST_NAME, ArrayList ALBUM_ART, ArrayList DATA, ArrayList TIME) {
+    public AddSongsAdapter(Context mContext, ArrayList<SongsModel> songs) {
         this.mContext = mContext;
-        this.SONG_NAME = SONG_NAME;
-        this.ARTIST_NAME = ARTIST_NAME;
-        this.ALBUM_ART = ALBUM_ART;
-        this.DATA = DATA;
-        this.TIME = TIME;
+        this.songs = songs;
     }
 
     @NonNull
@@ -49,18 +45,17 @@ public class AddSongsAdapter extends RecyclerView.Adapter<AddSongsAdapter.MyView
     public void onBindViewHolder(@NonNull final AddSongsAdapter.MyViewHolder holder, int position) {
         String songname, artistname;
 
-        songname = SONG_NAME.get(position).toString();
-        artistname = ARTIST_NAME.get(position).toString();
+        songname = songs.get(position).getSongName();
+        artistname = songs.get(position).getArtistName();
 
-        loadAlbumArt((Integer) ALBUM_ART.get(position), holder.ALBUMart);
+        loadAlbumArt(songs.get(position).getAlbumArt(), holder.ALBUMart);
         holder.SONGname.setText(songname);
         holder.ARTISTname.setText(artistname);
-
     }
 
     @Override
     public int getItemCount() {
-        return SONG_NAME.size();
+        return songs.size();
     }
 
     public void loadAlbumArt(int albumId, ImageView view) {
@@ -71,20 +66,17 @@ public class AddSongsAdapter extends RecyclerView.Adapter<AddSongsAdapter.MyView
         Glide.with(view.getContext()).load(path).override(250, 250).error(mDefaultBackground).into(view);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView SONGname, ARTISTname;
         public ImageView ALBUMart;
         CardView cardView;
 
         public MyViewHolder(View view) {
             super(view);
-            SONGname = (TextView) view.findViewById(R.id.Home_Dialog_Recycler_layout_name);
-            ARTISTname = (TextView) view.findViewById(R.id.Home_Dialog_Recycler_layout_artist);
-            ALBUMart = (ImageView) view.findViewById(R.id.Home_Dialog_Recycler_Image);
-            cardView = (CardView) view.findViewById(R.id.Home_Dialog_Recycler_Card);
+            SONGname = view.findViewById(R.id.Home_Dialog_Recycler_layout_name);
+            ARTISTname = view.findViewById(R.id.Home_Dialog_Recycler_layout_artist);
+            ALBUMart = view.findViewById(R.id.Home_Dialog_Recycler_Image);
+            cardView = view.findViewById(R.id.Home_Dialog_Recycler_Card);
         }
-
     }
-
-
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,17 +20,15 @@ import java.util.ArrayList;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder> {
 
-    static Context mContext;
-    private ArrayList SONG_NAME, ARTIST_NAME, ALBUM_ART, DU;
+    Context mContext;
+    ArrayList<SongsModel> songs;
 
-    public MusicAdapter(Context mContext, ArrayList SONG_NAME, ArrayList ARTIST_NAME, ArrayList ALBUM_ART, ArrayList DU) {
+    public MusicAdapter(Context mContext, ArrayList<SongsModel> songs) {
         this.mContext = mContext;
-        this.SONG_NAME = SONG_NAME;
-        this.ARTIST_NAME = ARTIST_NAME;
-        this.ALBUM_ART = ALBUM_ART;
-        this.DU = DU;
+        this.songs = songs;
     }
 
+    @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -40,14 +39,13 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        //Album album = albumList.get(position);
         String songname, artistname, du;
 
-        songname = SONG_NAME.get(position).toString();
-        artistname = ARTIST_NAME.get(position).toString();
-        du = DU.get(position).toString();
+        songname = songs.get(position).getSongName();
+        artistname = songs.get(position).getArtistName();
+        du = songs.get(position).getDuration();
 
-        loadAlbumArt((Integer) ALBUM_ART.get(position), holder.ALBUMart);
+        loadAlbumArt(songs.get(position).getAlbumArt(), holder.ALBUMart);
         holder.SONGname.setText(songname);
         holder.ARTISTname.setText(artistname);
         holder.DURATION.setText(du);
@@ -56,7 +54,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return ALBUM_ART.size();
+        return songs.size();
     }
 
     public void loadAlbumArt(int albumId, ImageView view) {
@@ -74,11 +72,11 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
         public MyViewHolder(final View view) {
             super(view);
-            DURATION = (TextView) view.findViewById(R.id.layout_duration);
-            SONGname = (TextView) view.findViewById(R.id.layout_name);
-            ARTISTname = (TextView) view.findViewById(R.id.layout_artist);
-            ALBUMart = (ImageView) view.findViewById(R.id.layout_image);
-            cardView = (CardView) view.findViewById(R.id.musicListCard);
+            DURATION = view.findViewById(R.id.layout_duration);
+            SONGname = view.findViewById(R.id.layout_name);
+            ARTISTname = view.findViewById(R.id.layout_artist);
+            ALBUMart = view.findViewById(R.id.layout_image);
+            cardView = view.findViewById(R.id.musicListCard);
 
         }
     }

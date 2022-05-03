@@ -1,11 +1,7 @@
 package com.miklabs.music.Dialogs;
 
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
-import static com.miklabs.music.Dialogs.HomeDialogRecyclerAdapter.ALBUM_ART;
-import static com.miklabs.music.Dialogs.HomeDialogRecyclerAdapter.ARTIST_NAME;
-import static com.miklabs.music.Dialogs.HomeDialogRecyclerAdapter.DATA;
-import static com.miklabs.music.Dialogs.HomeDialogRecyclerAdapter.SONG_NAME;
-import static com.miklabs.music.Dialogs.HomeDialogRecyclerAdapter.TIME;
+import static com.miklabs.music.Dialogs.HomeDialogRecyclerAdapter.SONGS;
 import static com.miklabs.music.PlaylistClasses.SQLiteHelperPlaylist.PLAYLIST_TABLE_NAME;
 import static com.miklabs.music.PlaylistClasses.SQLiteHelperPlaylist.Table_Playlist_ID;
 import static com.miklabs.music.PlaylistClasses.SQLiteHelperPlaylist.Table_Playlist_Name;
@@ -44,6 +40,7 @@ import com.miklabs.music.PlaylistClasses.SQLiteHelperPlaylist;
 import com.miklabs.music.PlaylistClasses.SQLiteHelperSongs;
 import com.miklabs.music.R;
 import com.miklabs.music.RecyclerItemClickListener;
+import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -51,8 +48,7 @@ import java.util.concurrent.TimeUnit;
 public class HomeAddPlaylistDialog extends Dialog {
 
     public static String NAME;
-    public static ArrayList<String> arrayListNameStorage, arrayListArtistStorage, arrayListDataStorage, arrayListDurationStorage;
-    public static ArrayList<Integer> idArrayListStorage;
+    public static ArrayList<SongsModel> songsStorage;
     Activity activity;
     Dialog dialog;
     MainActivity mainActivity;
@@ -69,8 +65,7 @@ public class HomeAddPlaylistDialog extends Dialog {
     String F_Result = "Not_Found";
     boolean recyclerClicked = false;
     HomeDialogRecyclerAdapter Adapter;
-    ArrayList<String> arrayListName, arrayListArtist, arrayListDuration, arrayListData;
-    ArrayList<Integer> idArrayList;
+    ArrayList<SongsModel> songs;
 
 
     public HomeAddPlaylistDialog(Activity activity) {
@@ -84,11 +79,11 @@ public class HomeAddPlaylistDialog extends Dialog {
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.home_add_playlist_dialog);
         mainActivity = new MainActivity();
-        close = (TextView) dialog.findViewById(R.id.home_dialog_close);
-        text = (EditText) dialog.findViewById(R.id.home_dialog_text);
-        recyclerView = (RecyclerView) dialog.findViewById(R.id.home_dialog_recycler);
-        createBtn = (Button) dialog.findViewById(R.id.home_dialog_create_btn);
-        layout = (RelativeLayout) dialog.findViewById(R.id.home_dialog_layout);
+        close = dialog.findViewById(R.id.home_dialog_close);
+        text = dialog.findViewById(R.id.home_dialog_text);
+        recyclerView = dialog.findViewById(R.id.home_dialog_recycler);
+        createBtn = dialog.findViewById(R.id.home_dialog_create_btn);
+        layout = dialog.findViewById(R.id.home_dialog_layout);
         sqLiteHelperPlaylist = new SQLiteHelperPlaylist(activity);
         sqLiteHelperSongs = new SQLiteHelperSongs(activity);
 
@@ -96,51 +91,32 @@ public class HomeAddPlaylistDialog extends Dialog {
 
         doStuff();
 
-
-        createBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NAME = text.getText().toString();
-                if (NAME.equals("")) {
-                    mainActivity.getSnackBar(activity, layout, "Please Give a Name to the Playlist", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
-                    text.requestFocus();
-                } else {
-                    PlaylistAlreadyExistsOrNot();
-                }
+        createBtn.setOnClickListener(v -> {
+            NAME = text.getText().toString();
+            if (NAME.equals("")) {
+                mainActivity.getSnackBar(activity, layout, "Please Give a Name to the Playlist", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
+                text.requestFocus();
+            } else {
+                PlaylistAlreadyExistsOrNot();
             }
         });
 
         dialog.show();
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        close.setOnClickListener(v -> dialog.dismiss());
     }
 
-
     public void doStuff() {
-        //musicListView = (ListView) findViewById(R.id.musicList);
-        arrayListName = new ArrayList<>();
-        arrayListArtist = new ArrayList<>();
-        arrayListDuration = new ArrayList<>();
-        arrayListData = new ArrayList<>();
-        idArrayList = new ArrayList<>();
 
-        arrayListArtistStorage = new ArrayList<>();
-        arrayListNameStorage = new ArrayList<>();
-        idArrayListStorage = new ArrayList<>();
-        arrayListDataStorage = new ArrayList<>();
-        arrayListDurationStorage = new ArrayList<>();
+        songs = new ArrayList<>();
+
+        songsStorage = new ArrayList<>();
 
         getMusic();
-        // ListAdapter adapter = new ListAdapter();
 
         recyclerView = dialog.findViewById(R.id.home_dialog_recycler);
         recyclerView.setHasFixedSize(true);
-        Adapter = new HomeDialogRecyclerAdapter(activity, arrayListName, arrayListArtist, idArrayList, arrayListData, arrayListDuration);
+        Adapter = new HomeDialogRecyclerAdapter(activity, songs);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
@@ -160,45 +136,7 @@ public class HomeAddPlaylistDialog extends Dialog {
 
             }
         }));
-
-
-        //musicListView.setAdapter(adapter);
-        /*musicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                goingToMusic=true;
-
-                SharedPreferences db= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-                editor = db.edit();
-
-                Gson gson0 = new Gson();
-                String songs = gson0.toJson(arrayListData);
-
-                Gson gson1 = new Gson();
-                String songname = gson1.toJson(arrayListName);
-
-                Gson gson2 = new Gson();
-                String ID = gson2.toJson(idArrayList);
-
-                Gson gson3 = new Gson();
-                String artist = gson3.toJson(arrayListArtist);
-
-                editor.putString("songs", songs);
-                editor.putString("songname", songname);
-                editor.putString("artist", artist);
-                editor.putString("id", ID);
-                editor.putInt("pos", position);
-                editor.apply();
-
-
-            }
-        }); */
-
-
     }
-
 
     public void getMusic() {
         ContentResolver contentResolver = activity.getContentResolver();
@@ -222,40 +160,27 @@ public class HomeAddPlaylistDialog extends Dialog {
                 int currentDuration = songCurosr.getInt(songDuration);
                 String currentData = songCurosr.getString(songData);
 
-
-                idArrayList.add(currentID);
-                arrayListName.add(currentTitle);
-                arrayListData.add(currentData);
-                arrayListArtist.add(currentArtist);
-                arrayListDuration.add("• " + String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
-                        TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        currentDuration))));
+                songs.add(new SongsModel(
+                        currentTitle,
+                        currentArtist,
+                        currentID,
+                        "• " + String.format("%02d:%02d",
+                                TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
+                                TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
+                                                currentDuration))),
+                        currentData
+                ));
 
             } while (songCurosr.moveToNext());
         }
     }
 
     public void delete(int position) {
-        String name, artist, albumArt, data, time;
-        name = String.valueOf(SONG_NAME.get(position));
-        artist = String.valueOf(ARTIST_NAME.get(position));
-        albumArt = String.valueOf(ALBUM_ART.get(position));
-        data = String.valueOf(DATA.get(position));
-        time = String.valueOf(TIME.get(position));
 
-        arrayListNameStorage.add(name);
-        arrayListArtistStorage.add(artist);
-        idArrayListStorage.add(Integer.valueOf(albumArt));
-        arrayListDataStorage.add(data);
-        arrayListDurationStorage.add(time);
+        songsStorage.add(SONGS.get(position));
 
-        SONG_NAME.remove(position);
-        ALBUM_ART.remove(position);
-        ARTIST_NAME.remove(position);
-        DATA.remove(position);
-        TIME.remove(position);
+        SONGS.remove(position);
 
         Adapter.notifyItemRemoved(position);
     }
@@ -286,19 +211,18 @@ public class HomeAddPlaylistDialog extends Dialog {
             }
         }, null);
 
-
         sqLiteDatabaseObj.execSQL("CREATE TABLE IF NOT EXISTS " + NAME + " (" + Table_Song_ID + " INTEGER PRIMARY KEY, " + Table_Song_Name + " VARCHAR, " + Table_Song_Artist + " VARCHAR, " + Table_Song_SongID + " INTEGER, " + Table_Song_SongDATA + " VARCHAR, " + Table_Song_SongDuration + " VARCHAR)");
 
-        for (int i = 0; i < arrayListNameStorage.size(); i++) {
+        for (int i = 0; i < songsStorage.size(); i++) {
             String name, artist, data, time;
             int id;
 
-            name = arrayListNameStorage.get(i);
-            artist = arrayListArtistStorage.get(i);
-            data = arrayListDataStorage.get(i);
-            time = arrayListDurationStorage.get(i);
+            name = songsStorage.get(i).getSongName();
+            artist = songsStorage.get(i).getArtistName();
+            data = songsStorage.get(i).getData();
+            time = songsStorage.get(i).getDuration();
 
-            id = idArrayListStorage.get(i);
+            id = songsStorage.get(i).getAlbumArt();
 
             SQLiteDataBaseQueryHolder = "INSERT INTO " + NAME + " (SongId,SongName,SongArtist,SongData,SongDuration) VALUES('" + id + "', '" + name + "', '" + artist + "', '" + data + "', '" + time + "');";
             sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
@@ -350,5 +274,4 @@ public class HomeAddPlaylistDialog extends Dialog {
         F_Result = "Not_Found";
 
     }
-
 }

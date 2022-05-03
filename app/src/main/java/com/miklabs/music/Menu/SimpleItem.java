@@ -11,10 +11,6 @@ import androidx.cardview.widget.CardView;
 
 import com.miklabs.music.R;
 
-
-/**
- * Created by yarolegovich on 25.03.2017.
- */
 public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
 
     private int selectedItemIconTint;

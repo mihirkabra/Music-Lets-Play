@@ -34,6 +34,7 @@ import com.miklabs.music.MainActivity;
 import com.miklabs.music.PlaylistClasses.SQLiteHelperSongs;
 import com.miklabs.music.R;
 import com.miklabs.music.RecyclerItemClickListener;
+import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -54,11 +55,7 @@ public class AddSongs extends Dialog {
 
     AddSongsAdapter Adapter;
 
-    ArrayList<String> arrayListName, arrayListArtist, arrayListDuration, arrayListData;
-    ArrayList<Integer> idArrayList;
-
-    ArrayList<String> arrayListNameStorage, arrayListArtistStorage, arrayListDataStorage, arrayListDurationStorage;
-    ArrayList<Integer> idArrayListStorage;
+    ArrayList<SongsModel> songs;
 
     boolean recyclerClicked = false;
 
@@ -99,41 +96,23 @@ public class AddSongs extends Dialog {
 
         dialog.show();
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
+        button.setOnClickListener(v -> dialog.dismiss());
     }
 
     public void doStuff() {
-        arrayListName = new ArrayList<>();
-        arrayListArtist = new ArrayList<>();
-        arrayListDuration = new ArrayList<>();
-        arrayListData = new ArrayList<>();
-        idArrayList = new ArrayList<>();
-
-        arrayListArtistStorage = new ArrayList<>();
-        arrayListNameStorage = new ArrayList<>();
-        idArrayListStorage = new ArrayList<>();
-        arrayListDataStorage = new ArrayList<>();
-        arrayListDurationStorage = new ArrayList<>();
+        songs = new ArrayList<>();
 
         getMusic();
 
         dialogAddRecycler = dialog.findViewById(R.id.dialogAddSongs_recycler);
         dialogAddRecycler.setHasFixedSize(true);
-        Adapter = new AddSongsAdapter(activity, arrayListName, arrayListArtist, idArrayList, arrayListData, arrayListDuration);
+        Adapter = new AddSongsAdapter(activity, songs);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         dialogAddRecycler.setLayoutManager(layoutManager);
         dialogAddRecycler.setAdapter(Adapter);
         Adapter.notifyDataSetChanged();
-        //songCheck();
-
 
         dialogAddRecycler.addOnItemTouchListener(new RecyclerItemClickListener(activity, dialogAddRecycler, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -149,7 +128,6 @@ public class AddSongs extends Dialog {
         }));
 
     }
-
 
     public void getMusic() {
         ContentResolver contentResolver = activity.getContentResolver();
@@ -169,21 +147,20 @@ public class AddSongs extends Dialog {
                 int currentID = songCurosr.getInt(songID);
                 String currentTitle = songCurosr.getString(songTitle);
                 String currentArtist = songCurosr.getString(songArtist);
-                //int currentDuration = parseInt(songCurosr.getString(songDuration));
                 int currentDuration = songCurosr.getInt(songDuration);
                 String currentData = songCurosr.getString(songData);
 
-
-                idArrayList.add(currentID);
-                arrayListName.add(currentTitle);
-                arrayListData.add(currentData);
-                arrayListArtist.add(currentArtist);
-                arrayListDuration.add("• " + String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
-                        TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        currentDuration))));
-
+                songs.add(new SongsModel(
+                        currentTitle,
+                        currentArtist,
+                        currentID,
+                        "• " + String.format("%02d:%02d",
+                                TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
+                                TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
+                                                currentDuration))),
+                        currentData
+                ));
             } while (songCurosr.moveToNext());
         }
     }
@@ -192,11 +169,11 @@ public class AddSongs extends Dialog {
         Adapter.notifyDataSetChanged();
 
         String name, artist, albumArt, data, time;
-        name = String.valueOf(arrayListName.get(position));
-        artist = String.valueOf(arrayListArtist.get(position));
-        albumArt = String.valueOf(idArrayList.get(position));
-        data = String.valueOf(arrayListData.get(position));
-        time = String.valueOf(arrayListDuration.get(position));
+        name = String.valueOf(songs.get(position).getSongName());
+        artist = String.valueOf(songs.get(position).getArtistName());
+        albumArt = String.valueOf(songs.get(position).getAlbumArt());
+        data = String.valueOf(songs.get(position).getData());
+        time = String.valueOf(songs.get(position).getDuration());
 
         SongAlreadyExistsOrNot(name, artist, data, time, Integer.parseInt(albumArt), position);
     }
@@ -238,7 +215,6 @@ public class AddSongs extends Dialog {
 
     }
 
-
     public void CheckFinalResult(String name, String artist, String data, String time, int id, int position) {
 
         if (F_Result.equalsIgnoreCase("Found")) {
@@ -246,11 +222,7 @@ public class AddSongs extends Dialog {
             mainActivity.getSnackBar(activity, layout, "Song already exists!", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_SHORT);
 
         } else {
-            arrayListName.remove(position);
-            arrayListArtist.remove(position);
-            arrayListDuration.remove(position);
-            arrayListData.remove(position);
-            idArrayList.remove(position);
+            songs.remove(position);
             Adapter.notifyItemRemoved(position);
             SQLiteAddSongs(name, artist, data, time, id);
             mainActivity.getSnackBar(activity, layout, "Song added successfully!", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_SHORT);
@@ -259,6 +231,4 @@ public class AddSongs extends Dialog {
         F_Result = "Not_Found";
 
     }
-
-
 }

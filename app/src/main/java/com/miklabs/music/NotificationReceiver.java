@@ -8,10 +8,7 @@ import static com.miklabs.music.MusicPlayer.isMute;
 import static com.miklabs.music.MusicPlayer.isRepeat;
 import static com.miklabs.music.MusicPlayer.mediaPlayer;
 import static com.miklabs.music.MusicPlayer.musicSeekbar;
-import static com.miklabs.music.MusicPlayer.mySongs;
-import static com.miklabs.music.MusicPlayer.mySongsAlbumID;
-import static com.miklabs.music.MusicPlayer.mySongsArtist;
-import static com.miklabs.music.MusicPlayer.mySongsName;
+import static com.miklabs.music.MusicPlayer.songs;
 import static com.miklabs.music.MusicPlayer.paused;
 import static com.miklabs.music.MusicPlayer.play;
 import static com.miklabs.music.MusicPlayer.playing;
@@ -74,7 +71,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                 mediaPlayer.release();
 
-                position = ((position + 1) % mySongs.size());
+                position = ((position + 1) % songs.size());
                 collection.putInt("pos", position);
                 collection.commit();
 
@@ -87,7 +84,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                 mediaPlayer.release();
 
-                position = ((position - 1) < 0) ? (mySongs.size() - 1) : (position - 1);
+                position = ((position - 1) < 0) ? (songs.size() - 1) : (position - 1);
                 collection.putInt("pos", position);
                 collection.commit();
 
@@ -128,29 +125,21 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                 long seed = System.nanoTime();
 
-                Collections.shuffle(mySongs, new Random(seed));
-
-
-                Collections.shuffle(mySongsName, new Random(seed));
-
-                Collections.shuffle(mySongsAlbumID, new Random(seed));
-
-                Collections.shuffle(mySongsArtist, new Random(seed));
-
+                Collections.shuffle(songs, new Random(seed));
 
                 mediaPlayer.stop();
 
                 mediaPlayer.release();
 
-                sname = mySongsName.get(position).toString();
+                sname = songs.get(position).getSongName();
 
-                loadAlbumArt(Integer.parseInt(mySongsAlbumID.get(position)), songImage, context);
+                loadAlbumArt(songs.get(position).getAlbumArt(), songImage, context);
 
-                artistname = mySongsArtist.get(position);
+                artistname = songs.get(position).getArtistName();
 
                 artistName.setText(artistname);
 
-                song = mySongs.get(position);
+                song = songs.get(position).getData();
 
                 Uri u = Uri.parse(song);
 
@@ -215,7 +204,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                             mediaPlayer.release();
 
-                            position = ((position + 1) % mySongs.size());
+                            position = ((position + 1) % songs.size());
                             collection.putInt("pos", position);
                             collection.commit();
 
@@ -234,17 +223,17 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void configMediaPlayer(final Context c) {
 
 
-        song = mySongs.get(position);
+        song = songs.get(position).getData();
 
         Uri u = Uri.parse(song);
 
         mediaPlayer = MediaPlayer.create(c, u);
 
-        sname = mySongsName.get(position).toString();
+        sname = songs.get(position).getSongName();
 
-        loadAlbumArt(Integer.parseInt(mySongsAlbumID.get(position)), songImage, c);
+        loadAlbumArt(songs.get(position).getAlbumArt(), songImage, c);
 
-        artistname = mySongsArtist.get(position);
+        artistname = songs.get(position).getArtistName();
 
         artistName.setText(artistname);
 
@@ -308,7 +297,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                     mediaPlayer.release();
 
-                    position = ((position + 1) % mySongs.size());
+                    position = ((position + 1) % songs.size());
                     collection.putInt("pos", position);
                     collection.commit();
 

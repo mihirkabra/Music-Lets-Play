@@ -18,7 +18,6 @@ import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQuery;
 import android.graphics.drawable.ColorDrawable;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,23 +82,15 @@ public class RenameDialog extends Dialog {
         sqLiteHelperSongs = new SQLiteHelperSongs(activity);
 
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        close.setOnClickListener(v -> dialog.dismiss());
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NAME = rename.getText().toString();
-                if (NAME.equals("")) {
-                    mainActivity.getSnackBar(activity, layout, "Please Give a Name to the Playlist", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
-                    rename.requestFocus();
-                } else {
-                    PlaylistAlreadyExistsOrNot();
-                }
+        button.setOnClickListener(v -> {
+            NAME = rename.getText().toString();
+            if (NAME.equals("")) {
+                mainActivity.getSnackBar(activity, layout, "Please Give a Name to the Playlist", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
+                rename.requestFocus();
+            } else {
+                PlaylistAlreadyExistsOrNot();
             }
         });
 
@@ -125,7 +116,6 @@ public class RenameDialog extends Dialog {
         CheckFinalResult();
 
     }
-
 
     public void CheckFinalResult() {
 
@@ -181,6 +171,4 @@ public class RenameDialog extends Dialog {
 
         sqLiteDatabaseObj.close();
     }
-
-
 }

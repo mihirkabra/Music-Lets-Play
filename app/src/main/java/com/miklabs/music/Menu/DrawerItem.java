@@ -2,10 +2,6 @@ package com.miklabs.music.Menu;
 
 import android.view.ViewGroup;
 
-/**
- * Created by yarolegovich on 25.03.2017.
- */
-
 public abstract class DrawerItem<T extends DrawerAdapter.ViewHolder> {
 
     protected boolean isChecked;

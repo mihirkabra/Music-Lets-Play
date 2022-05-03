@@ -2,16 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
-    android:layout_margin="5sp">
+    android:layout_margin="5dp"
+    android:gravity="center">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="20sp"
-        app:cardBackgroundColor="#575757"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="#717171"
         app:cardCornerRadius="15dp">
 
         <RelativeLayout
@@ -29,14 +31,14 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
+                    android:layout_height="10dp" />
 
 
                 <TextView
                     android:id="@+id/dialogAdd_text"
                     android:layout_width="match_parent"
-                    android:layout_height="40sp"
-                    android:layout_margin="5sp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:fontFamily="@font/font"
                     android:gravity="center"
                     android:text="Select the Playlist"
@@ -46,33 +48,34 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="15sp" />
+                    android:layout_height="15dp" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="400sp"
-                    android:layout_margin="5sp"
+                    android:layout_height="450dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="1.5"
                     app:cardBackgroundColor="#80000000"
-                    app:cardCornerRadius="12sp"
-                    app:cardElevation="7sp">
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="7dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/dialogAdd_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="4sp"
+                        android:layout_margin="5dp"
+                        tools:listitem="@layout/playlist_list_layout"
 
                         />
                 </androidx.cardview.widget.CardView>
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
+                    android:layout_height="10dp" />
 
                 <Button
                     android:id="@+id/dialogAdd_close"
-                    android:layout_width="150sp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_shape"
                     android:backgroundTint="#000"
@@ -85,11 +88,11 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
+                    android:layout_height="10dp" />
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="15sp" />
+                    android:layout_height="15dp" />
             </LinearLayout>
 
 

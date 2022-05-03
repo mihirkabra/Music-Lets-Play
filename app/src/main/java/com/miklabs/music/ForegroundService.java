@@ -1,9 +1,10 @@
 package com.miklabs.music;
 
 import static com.miklabs.music.MusicPlayer.mediaPlayer;
-import static com.miklabs.music.MusicPlayer.mySongsAlbumID;
-import static com.miklabs.music.MusicPlayer.mySongsArtist;
-import static com.miklabs.music.MusicPlayer.mySongsName;
+import static com.miklabs.music.MusicPlayer.songs;
+//import static com.miklabs.music.MusicPlayer.mySongsAlbumID;
+//import static com.miklabs.music.MusicPlayer.mySongsArtist;
+//import static com.miklabs.music.MusicPlayer.mySongsName;
 import static com.miklabs.music.MusicPlayer.position;
 
 import android.app.Notification;
@@ -44,7 +45,7 @@ public class ForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Bitmap b = getAlbumart(this, Long.valueOf(mySongsAlbumID.get(position)));
+        Bitmap b = getAlbumart(this, (long) songs.get(position).getAlbumArt());
 
         int position = intent.getIntExtra("MusicPlayerPosition", 0);
         createNotificationChannel();
@@ -77,8 +78,8 @@ public class ForegroundService extends Service {
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_logo)
-                .setContentTitle(mySongsName.get(position))
-                .setContentText(mySongsArtist.get(position))
+                .setContentTitle(songs.get(position).getSongName())
+                .setContentText(songs.get(position).getArtistName())
                 .setLargeIcon(b)
                 .setContentIntent(pendingIntent)
                 .setSound(null)
@@ -177,7 +178,9 @@ public class ForegroundService extends Service {
                 fd = null;
             }
         } catch (Error ee) {
+            ee.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (null != albumArtBitMap) {
@@ -187,6 +190,4 @@ public class ForegroundService extends Service {
             return albumArtBitMap;
         }
     }
-
-
 }

@@ -21,14 +21,11 @@ public class AboutUs extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.about_us_layout, container, false);
 
-        LinearLayout developer = (LinearLayout) view.findViewById(R.id.developer);
-        developer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri url = Uri.parse("https://www.google.com/search?q=mihir+kabra");
-                Intent i = new Intent(Intent.ACTION_VIEW, url);
-                startActivity(i);
-            }
+        LinearLayout developer = view.findViewById(R.id.developer);
+        developer.setOnClickListener(v -> {
+            Uri url = Uri.parse("https://www.google.com/search?q=mihir+kabra");
+            Intent i = new Intent(Intent.ACTION_VIEW, url);
+            startActivity(i);
         });
 
         return view;

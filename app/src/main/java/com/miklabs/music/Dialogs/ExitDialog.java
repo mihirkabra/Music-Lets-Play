@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +14,8 @@ import android.widget.TextView;
 import com.miklabs.music.ForegroundService;
 import com.miklabs.music.MainActivity;
 import com.miklabs.music.R;
+
+import java.util.Objects;
 
 public class ExitDialog extends Dialog {
 
@@ -40,29 +41,23 @@ public class ExitDialog extends Dialog {
 
         mainActivity = new MainActivity();
 
-        text = (TextView) dialog.findViewById(R.id.dialogSimple_text);
-        text_NO = (TextView) dialog.findViewById(R.id.dialogSimple_NO);
+        text = dialog.findViewById(R.id.dialogSimple_text);
+        text_NO = dialog.findViewById(R.id.dialogSimple_NO);
 
-        image = (ImageView) dialog.findViewById(R.id.dialogSimple_image);
+        image = dialog.findViewById(R.id.dialogSimple_image);
 
-        button_YES = (Button) dialog.findViewById(R.id.dialogSimple_YES);
+        button_YES = dialog.findViewById(R.id.dialogSimple_YES);
 
-        text_NO.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        text_NO.setOnClickListener(v -> {
 
-                int p = MainActivity.db.getInt("fragmentNo", 0);
-                MainActivity.list.findViewHolderForAdapterPosition(p).itemView.performClick();
-                dialog.dismiss();
+            int p = MainActivity.db.getInt("fragmentNo", 0);
+            Objects.requireNonNull(MainActivity.list.findViewHolderForAdapterPosition(p)).itemView.performClick();
+            dialog.dismiss();
 
-            }
         });
-        button_YES.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopService();
-                mainActivity.exitApp();
-            }
+        button_YES.setOnClickListener(v -> {
+            stopService();
+            mainActivity.exitApp();
         });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();

@@ -2,16 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
-    android:layout_margin="5sp">
+    android:gravity="center"
+    android:layout_margin="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="20sp"
-        app:cardBackgroundColor="#ff3d00"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="#717171"
         app:cardCornerRadius="15dp">
 
         <RelativeLayout
@@ -29,14 +31,14 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
+                    android:layout_height="10dp" />
 
 
                 <TextView
                     android:id="@+id/dialogAddSongs_text"
                     android:layout_width="match_parent"
-                    android:layout_height="40sp"
-                    android:layout_margin="5sp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:fontFamily="@font/font"
                     android:gravity="center"
                     android:text="Select the Songs"
@@ -46,33 +48,35 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="15sp" />
+                    android:layout_height="15dp" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="400sp"
-                    android:layout_margin="5sp"
+                    android:layout_height="450dp"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
                     android:layout_weight="1.5"
-                    app:cardBackgroundColor="#59C30000"
-                    app:cardCornerRadius="12sp"
-                    app:cardElevation="7sp">
+                    app:cardBackgroundColor="#D83A3A3A"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="7dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/dialogAddSongs_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="4sp"
+                        android:background="#D83A3A3A"
+                        tools:listitem="@layout/home_dialog_recycler_layout"
 
                         />
                 </androidx.cardview.widget.CardView>
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="10sp" />
+                    android:layout_height="20dp" />
 
                 <Button
                     android:id="@+id/dialogAddSongs_create"
-                    android:layout_width="150sp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_shape"
                     android:backgroundTint="@color/whiteColor"
@@ -86,7 +90,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="15sp" />
+                    android:layout_height="15dp" />
             </LinearLayout>
 
 

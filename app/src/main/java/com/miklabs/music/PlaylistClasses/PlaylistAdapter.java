@@ -37,7 +37,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
         String playlistNameString;
 
-        playlistNameString = playlistNameArrayList.get(i).toString();
+        playlistNameString = playlistNameArrayList.get(i);
         myViewHolder.playlist_name.setText(playlistNameString);
 
         myViewHolder.clipart.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clipart));
@@ -50,15 +50,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView clipart;
         TextView playlist_name;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            clipart = (ImageView) itemView.findViewById(R.id.playlist_list_image);
-            playlist_name = (TextView) itemView.findViewById(R.id.playlist_name);
+            clipart = itemView.findViewById(R.id.playlist_list_image);
+            playlist_name = itemView.findViewById(R.id.playlist_name);
         }
     }
 }

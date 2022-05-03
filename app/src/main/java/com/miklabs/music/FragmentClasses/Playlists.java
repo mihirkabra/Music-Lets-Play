@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -34,6 +33,7 @@ import com.miklabs.music.PlaylistClasses.SQLiteHelperSongs;
 import com.miklabs.music.R;
 import com.miklabs.music.RecyclerItemClickListener;
 import com.miklabs.music.Songs;
+import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
 
@@ -54,7 +54,7 @@ public class Playlists extends Fragment {
         sqLiteHelperSongs = new SQLiteHelperSongs(getContext());
         getData();
 
-        playlistRecyclerView = (RecyclerView) view.findViewById(R.id.playlistRecyclerView);
+        playlistRecyclerView = view.findViewById(R.id.playlistRecyclerView);
         playlistRecyclerView.setHasFixedSize(true);
         adapter = new PlaylistAdapter(getContext(), PlaylistName);
 
@@ -88,69 +88,50 @@ public class Playlists extends Fragment {
 
                 popup.inflate(R.menu.playlist_more_menu);
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.playlist_more_menu_play:
+                popup.setOnMenuItemClickListener(item -> {
+                    switch (item.getItemId()) {
+                        case R.id.playlist_more_menu_play:
 
-                                ArrayList DataList, NameList, IdList, ArtistList;
-                                DataList = sqLiteHelperSongs.getSongData(PlaylistNameForSongs);
-                                NameList = sqLiteHelperSongs.getSongNames(PlaylistNameForSongs);
-                                IdList = sqLiteHelperSongs.getSongId(PlaylistNameForSongs);
-                                ArtistList = sqLiteHelperSongs.getArtistNames(PlaylistNameForSongs);
+                            ArrayList<SongsModel> songs = sqLiteHelperSongs.getSongs(PlaylistNameForSongs);
 
-                                if (NameList.size() == 0) {
-                                    MainActivity m = new MainActivity();
-                                    m.getSnackBar(getActivity(), MainActivity.layout, "The Playlist: " + PlaylistNameForSongs + " is Empty!", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
-                                } else {
-                                    ContentHome.goingToMusic = true;
+                            if (songs.size() == 0) {
+                                MainActivity m = new MainActivity();
+                                m.getSnackBar(requireActivity(), MainActivity.layout, "The Playlist: " + PlaylistNameForSongs + " is Empty!", R.color.whiteColor, R.color.colorPrimaryDark, Snackbar.LENGTH_LONG);
+                            } else {
+                                ContentHome.goingToMusic = true;
 
-                                    SharedPreferences db = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences db = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-                                    collection = db.edit();
+                                collection = db.edit();
 
-                                    Gson gson0 = new Gson();
-                                    String songs = gson0.toJson(DataList);
+                                Gson songsGson = new Gson();
+                                String songsStr = songsGson.toJson(songs);
 
-                                    Gson gson1 = new Gson();
-                                    String songname = gson1.toJson(NameList);
+                                collection.putString("songs", songsStr);
+                                collection.putInt("pos", position);
+                                collection.apply();
+                                startActivity(new Intent(getContext(), MusicPlayer.class));
+                            }
 
-                                    Gson gson2 = new Gson();
-                                    String ID = gson2.toJson(IdList);
+                            return true;
 
-                                    Gson gson3 = new Gson();
-                                    String artist = gson3.toJson(ArtistList);
+                        case R.id.playlist_more_menu_add:
+                            AddSongs addSongsDialog = new AddSongs(getActivity(), position);
+                            addSongsDialog.showDialog();
+                            return true;
 
-                                    collection.putString("songs", songs);
-                                    collection.putString("songname", songname);
-                                    collection.putString("artist", artist);
-                                    collection.putString("id", ID);
-                                    collection.putInt("pos", 0);
-                                    collection.apply();
-                                    startActivity(new Intent(getContext(), MusicPlayer.class));
-                                }
+                        case R.id.playlist_more_menu_rename:
+                            RenameDialog renameDialog = new RenameDialog(getActivity(), position);
+                            renameDialog.showDialog();
+                            return true;
 
-                                return true;
+                        case R.id.playlist_more_menu_delete:
+                            DeleteDialog d = new DeleteDialog(getActivity(), position);
+                            d.showDialog();
+                            return true;
 
-                            case R.id.playlist_more_menu_add:
-                                AddSongs addSongsDialog = new AddSongs(getActivity(), position);
-                                addSongsDialog.showDialog();
-                                return true;
-
-                            case R.id.playlist_more_menu_rename:
-                                RenameDialog renameDialog = new RenameDialog(getActivity(), position);
-                                renameDialog.showDialog();
-                                return true;
-
-                            case R.id.playlist_more_menu_delete:
-                                DeleteDialog d = new DeleteDialog(getActivity(), position);
-                                d.showDialog();
-                                return true;
-
-                            default:
-                                return false;
-                        }
+                        default:
+                            return false;
                     }
                 });
 
@@ -170,7 +151,7 @@ public class Playlists extends Fragment {
 
         if (isVisibleToUser) {
             if (PlaylistName.size() == 0) {
-                EmptyDialog d = new EmptyDialog(getActivity(), "No Playlist is yet created!");
+                EmptyDialog d = new EmptyDialog(requireActivity(), "No Playlist is yet created!");
                 d.showDialog();
             }
         }

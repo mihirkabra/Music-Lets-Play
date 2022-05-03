@@ -32,6 +32,7 @@ import com.miklabs.music.PlaylistClasses.SQLiteHelperSongs;
 import com.miklabs.music.PlaylistClasses.SongsAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Songs extends AppCompatActivity {
 
@@ -42,8 +43,7 @@ public class Songs extends AppCompatActivity {
 
     RecyclerView playlistSongRecycler;
     SongsAdapter SongAdapter;
-    ArrayList<Integer> SongIdList;
-    ArrayList<String> SongNameList, SongArtistList, SongDataList, SongDurationList;
+    ArrayList<SongsModel> songs;
 
     SQLiteHelperSongs sqLiteHelperSongs;
 
@@ -65,12 +65,12 @@ public class Songs extends AppCompatActivity {
         toolbar = findViewById(R.id.songsToolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         collapsingToolbar = findViewById(R.id.songsCollapsing_toolbar);
         collapsingToolbar.setTitle("Music List");
-        appBar = (AppBarLayout) findViewById(R.id.songsAppbar);
+        appBar = findViewById(R.id.songsAppbar);
         collapsingToolbar.setTitle("Playlist: " + PlaylistNameForSongs);
 
 
@@ -82,9 +82,9 @@ public class Songs extends AppCompatActivity {
 
         getData();
 
-        playlistSongRecycler = (RecyclerView) findViewById(R.id.songsRecycler);
-        SongAdapter = new SongsAdapter(SongIdList, SongNameList, SongArtistList, SongDataList, SongDurationList, this);
-
+        playlistSongRecycler = findViewById(R.id.songsRecycler);
+//        SongAdapter = new SongsAdapter(SongIdList, SongNameList, SongArtistList, SongDataList, SongDurationList, this);
+        SongAdapter = new SongsAdapter(this, songs);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         playlistSongRecycler.setLayoutManager(layoutManager);
@@ -106,21 +106,9 @@ public class Songs extends AppCompatActivity {
                 collection = db.edit();
 
                 Gson gson0 = new Gson();
-                String songs = gson0.toJson(SongDataList);
+                String songsStr = gson0.toJson(songs);
 
-                Gson gson1 = new Gson();
-                String songname = gson1.toJson(SongNameList);
-
-                Gson gson2 = new Gson();
-                String ID = gson2.toJson(SongIdList);
-
-                Gson gson3 = new Gson();
-                String artist = gson3.toJson(SongArtistList);
-
-                collection.putString("songs", songs);
-                collection.putString("songname", songname);
-                collection.putString("artist", artist);
-                collection.putString("id", ID);
+                collection.putString("songs", songsStr);
                 collection.putInt("pos", position);
                 collection.apply();
                 startActivity(new Intent(Songs.this, MusicPlayer.class));
@@ -146,21 +134,9 @@ public class Songs extends AppCompatActivity {
                                 collection = db.edit();
 
                                 Gson gson0 = new Gson();
-                                String songs = gson0.toJson(SongDataList);
+                                String songsStr = gson0.toJson(songs);
 
-                                Gson gson1 = new Gson();
-                                String songname = gson1.toJson(SongNameList);
-
-                                Gson gson2 = new Gson();
-                                String ID = gson2.toJson(SongIdList);
-
-                                Gson gson3 = new Gson();
-                                String artist = gson3.toJson(SongArtistList);
-
-                                collection.putString("songs", songs);
-                                collection.putString("songname", songname);
-                                collection.putString("artist", artist);
-                                collection.putString("id", ID);
+                                collection.putString("songs", songsStr);
                                 collection.putInt("pos", position);
                                 collection.apply();
                                 startActivity(new Intent(Songs.this, MusicPlayer.class));
@@ -172,14 +148,11 @@ public class Songs extends AppCompatActivity {
                                 sqLiteDatabaseObj = openOrCreateDatabase("/data/data/com.miklabs.music/databases/PlaylistSongs.db", Context.MODE_PRIVATE, null);
 
 
-                                SQLiteDataBaseQueryHolder = "delete from " + PlaylistNameForSongs + " where SongName ='" + SongNameList.get(position) + "'";
+                                SQLiteDataBaseQueryHolder = "delete from " + PlaylistNameForSongs + " where SongName ='" + songs.get(position).getSongName() + "'";
                                 sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
                                 sqLiteDatabaseObj.close();
 
-                                SongNameList.remove(position);
-                                SongArtistList.remove(position);
-                                SongIdList.remove(position);
-                                SongDataList.remove(position);
+                                songs.remove(position);
 
                                 SongAdapter.notifyDataSetChanged();
 
@@ -206,10 +179,9 @@ public class Songs extends AppCompatActivity {
     }*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
             /*case R.id.songs_options_menu:
                 View v = this.findViewById(R.id.songs_options_menu);
                 PopupMenu popup = new PopupMenu(this, v);
@@ -240,12 +212,13 @@ public class Songs extends AppCompatActivity {
     }
 
     public void getData() {
-        SongNameList = sqLiteHelperSongs.getSongNames(PlaylistNameForSongs);
-        SongArtistList = sqLiteHelperSongs.getArtistNames(PlaylistNameForSongs);
-        SongDataList = sqLiteHelperSongs.getSongData(PlaylistNameForSongs);
-        SongIdList = sqLiteHelperSongs.getSongId(PlaylistNameForSongs);
-        SongDurationList = sqLiteHelperSongs.getSongDuration(PlaylistNameForSongs);
-        if (SongNameList.size() == 0) {
+//        SongNameList = sqLiteHelperSongs.getSongNames(PlaylistNameForSongs);
+//        SongArtistList = sqLiteHelperSongs.getArtistNames(PlaylistNameForSongs);
+//        SongDataList = sqLiteHelperSongs.getSongData(PlaylistNameForSongs);
+//        SongIdList = sqLiteHelperSongs.getSongId(PlaylistNameForSongs);
+//        SongDurationList = sqLiteHelperSongs.getSongDuration(PlaylistNameForSongs);
+        songs = sqLiteHelperSongs.getSongs(PlaylistNameForSongs);
+        if (songs.size() == 0) {
             MainActivity m = new MainActivity();
             m.getSnackBar(Songs.this, layout,
                     "No Songs were added to this Playlist!",

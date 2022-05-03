@@ -13,7 +13,7 @@ public class SQLiteHelperPlaylist extends SQLiteOpenHelper {
     public static final String Table_Playlist_ID = "id";
     public static final String Table_Playlist_Name = "PlaylistName";
     public static String DATABASE_NAME = "Playlists.db";
-    private Context context;
+//    private Context context;
 
 //    public String DB_PATH = "";
 //

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -34,6 +33,7 @@ import com.miklabs.music.MusicAdapter;
 import com.miklabs.music.MusicPlayer;
 import com.miklabs.music.R;
 import com.miklabs.music.RecyclerItemClickListener;
+import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -41,8 +41,8 @@ import java.util.concurrent.TimeUnit;
 public class ContentHome extends Fragment {
     public static SharedPreferences.Editor collection;
     public static boolean goingToMusic;
-    public static ArrayList<String> arrayListName, arrayListArtist, arrayListDuration, arrayListData;
-    public static ArrayList<Integer> idArrayList;
+    SongsModel songsModel;
+    public static ArrayList<SongsModel> songs;
     RecyclerView recyclerView;
     MusicAdapter Adapter;
 
@@ -51,13 +51,10 @@ public class ContentHome extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_home, container, false);
 
-
         requestPermission(view);
-
 
         return view;
     }
-
 
     public void requestPermission(final View v) {
         Dexter.withActivity(getActivity())
@@ -65,7 +62,6 @@ public class ContentHome extends Fragment {
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        //display();
                         doStuff(v);
                     }
 
@@ -83,29 +79,21 @@ public class ContentHome extends Fragment {
                 }).check();
     }
 
-
     public void doStuff(View v) {
-        //musicListView = (ListView) findViewById(R.id.musicList);
-        arrayListName = new ArrayList<>();
-        arrayListArtist = new ArrayList<>();
-        arrayListDuration = new ArrayList<>();
-        arrayListData = new ArrayList<>();
-        idArrayList = new ArrayList<>();
+
+        songs = new ArrayList<>();
 
         getMusic();
-        // ListAdapter adapter = new ListAdapter();
 
         recyclerView = v.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
-        Adapter = new MusicAdapter(getActivity(), arrayListName, arrayListArtist, idArrayList, arrayListDuration);
-
+        Adapter = new MusicAdapter(getActivity(), songs);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(Adapter);
         Adapter.notifyDataSetChanged();
-
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -119,22 +107,10 @@ public class ContentHome extends Fragment {
 
                 collection = db.edit();
 
-                Gson gson0 = new Gson();
-                String songs = gson0.toJson(arrayListData);
-
-                Gson gson1 = new Gson();
-                String songname = gson1.toJson(arrayListName);
-
-                Gson gson2 = new Gson();
-                String ID = gson2.toJson(idArrayList);
-
-                Gson gson3 = new Gson();
-                String artist = gson3.toJson(arrayListArtist);
+                Gson songsGson = new Gson();
+                String songs = songsGson.toJson(ContentHome.songs);
 
                 collection.putString("songs", songs);
-                collection.putString("songname", songname);
-                collection.putString("artist", artist);
-                collection.putString("id", ID);
                 collection.putInt("pos", position);
                 collection.apply();
                 startActivity(new Intent(getContext(), MusicPlayer.class));
@@ -142,103 +118,49 @@ public class ContentHome extends Fragment {
 
             @Override
             public void onLongItemClick(View view, final int position) {
-                MusicAdapter.MyViewHolder holder = new MusicAdapter.MyViewHolder(view);
                 PopupMenu popup = new PopupMenu(getContext(), view);
 
                 popup.inflate(R.menu.music_more_menu);
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.music_more_menu_play:
+                popup.setOnMenuItemClickListener(item -> {
+                    switch (item.getItemId()) {
+                        case R.id.music_more_menu_play:
 
-                                MainActivity.PlaylistNameForSongs = "PlaylistName";
+                            MainActivity.PlaylistNameForSongs = "PlaylistName";
 
-                                goingToMusic = true;
+                            goingToMusic = true;
 
-                                SharedPreferences db = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences db = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-                                collection = db.edit();
+                            collection = db.edit();
 
-                                Gson gson0 = new Gson();
-                                String songs = gson0.toJson(arrayListData);
+                            Gson gson0 = new Gson();
+                            String songs = gson0.toJson(ContentHome.songs);
 
-                                Gson gson1 = new Gson();
-                                String songname = gson1.toJson(arrayListName);
+                            collection.putString("songs", songs);
+                            collection.putInt("pos", position);
+                            collection.apply();
+                            startActivity(new Intent(getContext(), MusicPlayer.class));
 
-                                Gson gson2 = new Gson();
-                                String ID = gson2.toJson(idArrayList);
+                            return true;
 
-                                Gson gson3 = new Gson();
-                                String artist = gson3.toJson(arrayListArtist);
+                        case R.id.music_more_menu_add:
+                            AddToPlaylistDialog d = new AddToPlaylistDialog(getActivity(), position);
+                            d.showDialog();
+                            return true;
 
-                                collection.putString("songs", songs);
-                                collection.putString("songname", songname);
-                                collection.putString("artist", artist);
-                                collection.putString("id", ID);
-                                collection.putInt("pos", position);
-                                collection.apply();
-                                startActivity(new Intent(getContext(), MusicPlayer.class));
-
-                                return true;
-
-                            case R.id.music_more_menu_add:
-                                AddToPlaylistDialog d = new AddToPlaylistDialog(getActivity(), position);
-                                d.showDialog();
-                                return true;
-
-                            default:
-                                return false;
-                        }
+                        default:
+                            return false;
                     }
                 });
 
                 popup.show();
             }
-
         }));
-
-
-        //musicListView.setAdapter(adapter);
-        /*musicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                goingToMusic=true;
-
-                SharedPreferences db= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-                editor = db.edit();
-
-                Gson gson0 = new Gson();
-                String songs = gson0.toJson(arrayListData);
-
-                Gson gson1 = new Gson();
-                String songname = gson1.toJson(arrayListName);
-
-                Gson gson2 = new Gson();
-                String ID = gson2.toJson(idArrayList);
-
-                Gson gson3 = new Gson();
-                String artist = gson3.toJson(arrayListArtist);
-
-                editor.putString("songs", songs);
-                editor.putString("songname", songname);
-                editor.putString("artist", artist);
-                editor.putString("id", ID);
-                editor.putInt("pos", position);
-                editor.apply();
-
-
-            }
-        }); */
-
-
     }
 
     public void getMusic() {
-        ContentResolver contentResolver = getActivity().getContentResolver();
+        ContentResolver contentResolver = requireActivity().getContentResolver();
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCurosr = contentResolver.query(songUri, null, null, null, null);
 
@@ -255,24 +177,24 @@ public class ContentHome extends Fragment {
                 int currentID = songCurosr.getInt(songID);
                 String currentTitle = songCurosr.getString(songTitle);
                 String currentArtist = songCurosr.getString(songArtist);
-                //int currentDuration = parseInt(songCurosr.getString(songDuration));
                 int currentDuration = songCurosr.getInt(songDuration);
                 String currentData = songCurosr.getString(songData);
 
+                songsModel = new SongsModel(
+                        currentTitle,
+                        currentArtist,
+                        currentID,
+                        "• " + String.format("%02d:%02d",
+                                TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
+                                TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
+                                                currentDuration))),
+                        currentData
+                );
 
-                idArrayList.add(currentID);
-                arrayListName.add(currentTitle);
-                arrayListData.add(currentData);
-                arrayListArtist.add(currentArtist);
-                arrayListDuration.add("• " + String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes((long) currentDuration),
-                        TimeUnit.MILLISECONDS.toSeconds((long) currentDuration) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        currentDuration))));
+                songs.add(songsModel);
 
             } while (songCurosr.moveToNext());
         }
     }
-
-
 }

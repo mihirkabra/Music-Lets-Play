@@ -25,9 +25,9 @@
 
             <ImageView
                 android:id="@+id/playlist_list_image_dialog"
-                android:layout_width="45sp"
-                android:layout_height="45sp"
-                android:layout_margin="7sp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_margin="7dp"
                 android:src="@drawable/logo" />
 
             <LinearLayout
@@ -47,7 +47,7 @@
                         android:id="@+id/playlist_name_dialog"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15sp"
+                        android:layout_marginLeft="15dp"
                         android:text="Playlist Name"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"

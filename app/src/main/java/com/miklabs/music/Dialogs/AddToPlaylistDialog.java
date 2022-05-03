@@ -74,12 +74,12 @@ public class AddToPlaylistDialog extends Dialog {
         mainActivity = new MainActivity();
         sqLiteHelperSongs = new SQLiteHelperSongs(activity);
 
-        name = ContentHome.arrayListName.get(POSITION);
-        artist = ContentHome.arrayListArtist.get(POSITION);
-        data = ContentHome.arrayListData.get(POSITION);
-        time = ContentHome.arrayListDuration.get(POSITION);
+        name = ContentHome.songs.get(POSITION).getSongName();
+        artist = ContentHome.songs.get(POSITION).getArtistName();
+        data = ContentHome.songs.get(POSITION).getData();
+        time = ContentHome.songs.get(POSITION).getDuration();
 
-        id = ContentHome.idArrayList.get(POSITION);
+        id = ContentHome.songs.get(POSITION).getAlbumArt();
 
         dialogAddRecycler = dialog.findViewById(R.id.dialogAdd_recycler);
         adapter = new AddToPlaylistAdapter(getContext(), PlaylistName);
@@ -107,12 +107,7 @@ public class AddToPlaylistDialog extends Dialog {
 
 
         button = dialog.findViewById(R.id.dialogAdd_close);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        button.setOnClickListener(v -> dialog.dismiss());
 
         layout = dialog.findViewById(R.id.dialogAdd_layout);
 
@@ -171,5 +166,4 @@ public class AddToPlaylistDialog extends Dialog {
 
         F_Result = "Not_Found";
     }
-
 }
