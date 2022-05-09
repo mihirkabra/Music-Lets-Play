@@ -26,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.RequiresApi;
@@ -256,12 +257,8 @@ public class MusicPlayer extends AppCompatActivity {
 
             mediaPlayer.seekTo(mCurrentPosition);
         } else {
-            position = ((position + 1) % songs.size());
-            collection.putInt("pos", position);
-            collection.putInt("currentpos", 0);
-            collection.commit();
-
-            configMediaPlayer();
+            Toast.makeText(this, "This item is not available!", Toast.LENGTH_SHORT).show();
+            onBackPressed();
         }
 
         if (!playing) {
