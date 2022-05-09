@@ -243,19 +243,27 @@ public class MusicPlayer extends AppCompatActivity {
         file = new File(u.getPath());
 
         if (file.exists()) {
-            mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
 
-            mediaPlayer.start();
+            try{
+                mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
 
-            musicSeekbar.setMax(mediaPlayer.getDuration());
+                mediaPlayer.start();
 
-            setTotalTime();
+                musicSeekbar.setMax(mediaPlayer.getDuration());
 
-            startService(position);
+                setTotalTime();
 
-            UpdateSeekbar();
+                startService(position);
 
-            mediaPlayer.seekTo(mCurrentPosition);
+                UpdateSeekbar();
+
+                mediaPlayer.seekTo(mCurrentPosition);
+            } catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(this, "This item is not available!", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+            }
+
         } else {
             Toast.makeText(this, "This item is not available!", Toast.LENGTH_SHORT).show();
             onBackPressed();
