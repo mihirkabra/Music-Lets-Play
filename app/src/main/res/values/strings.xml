@@ -2,5 +2,5 @@
     <string name="app_name">Music</string>
     <string name="title_activity_music_player">MusicPlayer</string>
     <string name="link"><sup> [↗]</sup></string>
-    <string name="privacy_policy"><a href="https://blogsm.xyz/music-lets-play/privacypolicy.html">Privacy Policy</a></string>
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
 </resources>

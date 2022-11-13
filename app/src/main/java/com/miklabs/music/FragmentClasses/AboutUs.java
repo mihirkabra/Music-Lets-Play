@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,13 @@ public class AboutUs extends Fragment {
         LinearLayout developer = view.findViewById(R.id.developer);
         developer.setOnClickListener(v -> {
             Uri url = Uri.parse("https://www.google.com/search?q=mihir+kabra");
+            Intent i = new Intent(Intent.ACTION_VIEW, url);
+            startActivity(i);
+        });
+
+        TextView privacyPolicy = view.findViewById(R.id.privacy);
+        privacyPolicy.setOnClickListener(v->{
+            Uri url = Uri.parse("https://blogsm.xyz/music-lets-play/privacypolicy.html");
             Intent i = new Intent(Intent.ACTION_VIEW, url);
             startActivity(i);
         });
