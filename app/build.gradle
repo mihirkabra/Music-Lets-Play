@@ -5,13 +5,13 @@ apply plugin: 'kotlin-android'
 //apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.miklabs.music"
         minSdkVersion 16
-        targetSdkVersion 32
-        versionCode 3
-        versionName "1.0"
+        targetSdkVersion 33
+        versionCode 5
+        versionName "1.1.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -20,6 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.miklabs.music'
 }
 
 dependencies {

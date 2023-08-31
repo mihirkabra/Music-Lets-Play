@@ -25,7 +25,7 @@ public class AddSongsAdapter extends RecyclerView.Adapter<AddSongsAdapter.MyView
 
     ArrayList<SongsModel> songs;
     //#9900FF2A
-    private Context mContext;
+    private final Context mContext;
 
     public AddSongsAdapter(Context mContext, ArrayList<SongsModel> songs) {
         this.mContext = mContext;

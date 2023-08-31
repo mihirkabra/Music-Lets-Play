@@ -21,9 +21,9 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
     private int normalItemTextTint;
     private int normalCardTint;
 
-    private Drawable icon;
-    private String title;
-    private int card_color;
+    private final Drawable icon;
+    private final String title;
+    private final int card_color;
 
     public SimpleItem(Drawable icon, String title, int card_color) {
         this.icon = icon;
@@ -105,9 +105,9 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
 
     static class ViewHolder extends DrawerAdapter.ViewHolder {
 
-        private ImageView icon;
-        private TextView title;
-        private CardView cardView;
+        private final ImageView icon;
+        private final TextView title;
+        private final CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);

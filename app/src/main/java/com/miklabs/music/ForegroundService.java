@@ -47,31 +47,33 @@ public class ForegroundService extends Service {
         int position = intent.getIntExtra("MusicPlayerPosition", 0);
         createNotificationChannel();
 
+        int flag = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S
+                ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                : PendingIntent.FLAG_UPDATE_CURRENT;
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, new Intent(this, MusicPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                0, new Intent(this, MusicPlayer.class), flag);
 
 
         Intent receiveNext = new Intent(getApplicationContext(), NotificationReceiver.class);
         receiveNext.putExtra("Action", "NEXT_ACTION");
-        PendingIntent pendingIntentNext = PendingIntent.getBroadcast(this, 1, receiveNext, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentNext = PendingIntent.getBroadcast(this, 1, receiveNext, flag);
 
 
         Intent receivePrevious = new Intent(getApplicationContext(), NotificationReceiver.class);
         receivePrevious.putExtra("Action", "PREVIOUS_ACTION");
-        PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(this, 2, receivePrevious, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(this, 2, receivePrevious, flag);
 
         Intent receivePause = new Intent(getApplicationContext(), NotificationReceiver.class);
         receivePause.putExtra("Action", "PAUSE_ACTION");
-        PendingIntent pendingIntentPause = PendingIntent.getBroadcast(this, 3, receivePause, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentPause = PendingIntent.getBroadcast(this, 3, receivePause, flag);
 
         Intent receiveShuffle = new Intent(getApplicationContext(), NotificationReceiver.class);
         receiveShuffle.putExtra("Action", "SHUFFLE_ACTION");
-        PendingIntent pendingIntentShuffle = PendingIntent.getBroadcast(this, 4, receiveShuffle, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentShuffle = PendingIntent.getBroadcast(this, 4, receiveShuffle, flag);
 
         Intent receiveReplay = new Intent(getApplicationContext(), NotificationReceiver.class);
         receiveReplay.putExtra("Action", "REPLAY_ACTION");
-        PendingIntent pendingIntentReplay = PendingIntent.getBroadcast(this, 5, receiveReplay, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        PendingIntent pendingIntentReplay = PendingIntent.getBroadcast(this, 5, receiveReplay, flag);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_logo)

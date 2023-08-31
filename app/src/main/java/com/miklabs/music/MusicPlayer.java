@@ -244,7 +244,7 @@ public class MusicPlayer extends AppCompatActivity {
 
         if (file.exists()) {
 
-            try{
+            try {
                 mediaPlayer = MediaPlayer.create(MusicPlayer.this, u);
 
                 mediaPlayer.start();
@@ -258,7 +258,7 @@ public class MusicPlayer extends AppCompatActivity {
                 UpdateSeekbar();
 
                 mediaPlayer.seekTo(mCurrentPosition);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this, "This item is not available!", Toast.LENGTH_SHORT).show();
                 onBackPressed();

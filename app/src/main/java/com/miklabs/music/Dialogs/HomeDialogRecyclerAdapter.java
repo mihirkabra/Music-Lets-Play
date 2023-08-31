@@ -26,11 +26,11 @@ public class HomeDialogRecyclerAdapter extends RecyclerView.Adapter<HomeDialogRe
 
     public static ArrayList<SongsModel> SONGS;
     //#9900FF2A
-    private Context mContext;
+    private final Context mContext;
 
     public HomeDialogRecyclerAdapter(Context mContext, ArrayList<SongsModel> SONGS) {
         this.mContext = mContext;
-        this.SONGS = SONGS;
+        HomeDialogRecyclerAdapter.SONGS = SONGS;
     }
 
     @NonNull

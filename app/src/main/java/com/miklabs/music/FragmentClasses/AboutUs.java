@@ -30,7 +30,7 @@ public class AboutUs extends Fragment {
         });
 
         TextView privacyPolicy = view.findViewById(R.id.privacy);
-        privacyPolicy.setOnClickListener(v->{
+        privacyPolicy.setOnClickListener(v -> {
             Uri url = Uri.parse("https://blogsm.xyz/music-lets-play/privacypolicy.html");
             Intent i = new Intent(Intent.ACTION_VIEW, url);
             startActivity(i);

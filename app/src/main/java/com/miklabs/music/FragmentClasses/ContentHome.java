@@ -1,18 +1,22 @@
 package com.miklabs.music.FragmentClasses;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +26,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.miklabs.music.Dialogs.AddToPlaylistDialog;
 import com.miklabs.music.MainActivity;
 import com.miklabs.music.MusicAdapter;
@@ -36,6 +39,7 @@ import com.miklabs.music.RecyclerItemClickListener;
 import com.miklabs.music.SongsModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ContentHome extends Fragment {
@@ -51,32 +55,76 @@ public class ContentHome extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_home, container, false);
 
-        requestPermission(view);
+        requestPermissions(view);
 
         return view;
     }
 
-    public void requestPermission(final View v) {
+    private void requestPermissions(final View v) {
+        String[] requiredPermissions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requiredPermissions = new String[]{
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.POST_NOTIFICATIONS,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.FOREGROUND_SERVICE
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            requiredPermissions = new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.FOREGROUND_SERVICE
+            };
+        } else {
+            requiredPermissions = new String[]{
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+            };
+        }
         Dexter.withActivity(getActivity())
-                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new PermissionListener() {
+                .withPermissions(requiredPermissions)
+                .withListener(new MultiplePermissionsListener() {
                     @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        doStuff(v);
+                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                            doStuff(v);
+                        }
+                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
+                            showSettingsDialog();
+                        }
                     }
 
                     @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
                     }
+                }).withErrorListener(error -> {
+                    Toast.makeText(getActivity(), "Error occurred! ", Toast.LENGTH_SHORT).show();
+                })
+                .onSameThread().check();
+    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Permissions Needed");
 
-                        token.continuePermissionRequest();
-
-                    }
-                }).check();
+        builder.setMessage("This app needs all the required permissions for smooth functioning." +
+                "\n\n1. Notification Permission: for the Music Control in the notification panel." +
+                "\n\n2. Phone Permission: to Play/Pause Music while calling." +
+                "\n\n3. Storage Permission: to get all the Music files and their Cover Images." +
+                "\n\nYou can grant them in app settings.");
+        builder.setPositiveButton("Goto Settings", (dialog, which) -> {
+            dialog.cancel();
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+            intent.setData(uri);
+            startActivityForResult(intent, 101);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.cancel();
+        });
+        builder.show();
     }
 
     public void doStuff(View v) {
